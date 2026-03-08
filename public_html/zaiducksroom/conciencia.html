@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>conciencia</title>
+
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:#1f1f1f;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+font-family:'IBM Plex Mono', monospace;
+}
+
+/* ESCENA (tracking aquí ahora) */
+
+.escena{
+position:relative;
+transition:transform .25s ease;
+}
+
+/* IMAGEN */
+
+.imagen{
+opacity:0;
+transform:scale(.96);
+transition:opacity 2s ease, transform 2.6s ease;
+cursor:pointer;
+}
+
+.imagen.visible{
+opacity:1;
+transform:scale(1);
+}
+
+img{
+max-width:320px;
+display:block;
+}
+
+/* CRÉDITO */
+
+.credito{
+position:absolute;
+left:105%;
+top:50%;
+transform:translateY(-50%);
+font-size:10.5px;
+color:#8a8a8a;
+line-height:1.6;
+letter-spacing:.25px;
+opacity:0;
+transition:opacity 1.8s ease;
+}
+
+.credito.visible{opacity:.5;}
+
+/* LATIDO */
+
+body.prezoom img{
+transform:scale(1.08);
+transition:transform .35s cubic-bezier(.22,.7,.2,1);
+}
+
+/* ZOOM REAL */
+
+body.zoom img{
+transition:transform 1.6s cubic-bezier(.22,.7,.2,1);
+transform:scale(5.2);
+}
+
+body.zoom .credito{
+opacity:0;
+transition:opacity .45s ease;
+}
+
+/* NEGRO */
+
+.velo{
+position:fixed;
+inset:0;
+background:#1f1f1f;
+opacity:0;
+pointer-events:none;
+transition:opacity .28s ease;
+}
+
+body.fadeout .velo{opacity:1;}
+
+</style>
+</head>
+
+<body>
+
+<div class="escena">
+
+<div class="imagen">
+<img src="ojos 1.jpeg" alt="eyes">
+</div>
+
+<div class="credito"></div>
+
+</div>
+
+<div class="velo"></div>
+
+<script>
+
+/* LANG */
+
+let lang=localStorage.getItem("lang");
+
+if(!lang){
+const nav=navigator.language.slice(0,2);
+lang=nav==="es"?"es":"en";
+localStorage.setItem("lang",lang);
+}
+
+document.documentElement.setAttribute("lang",lang);
+
+/* TEXTOS */
+
+const textos={
+es:{credito:`Kathy Calderwood<br>Febrero, 1972`},
+en:{credito:`Kathy Calderwood<br>February, 1972`}
+};
+
+document.querySelector(".credito").innerHTML=textos[lang].credito;
+
+/* ENTRADA */
+
+setTimeout(()=>{
+document.querySelector(".imagen").classList.add("visible");
+},500);
+
+setTimeout(()=>{
+document.querySelector(".credito").classList.add("visible");
+},3500);
+
+/* TRACKING — ahora mueve escena, NO imagen */
+
+const escena=document.querySelector(".escena");
+
+document.addEventListener("mousemove",(e)=>{
+
+const x=(e.clientX/window.innerWidth-.5)*2;
+const y=(e.clientY/window.innerHeight-.5)*2;
+
+escena.style.transform=`translate(${x*6}px,${y*4}px)`;
+
+});
+
+/* CLICK HUMANO */
+
+document.querySelector(".imagen").addEventListener("click",()=>{
+
+document.body.classList.add("prezoom");
+
+setTimeout(()=>{
+
+document.body.classList.remove("prezoom");
+
+/* 🔥 congelar tracking antes del zoom */
+
+escena.style.transform="translate(0,0)";
+
+document.body.classList.add("zoom");
+
+setTimeout(()=>{
+document.body.classList.add("fadeout");
+},950);
+
+setTimeout(()=>{
+window.location.href="respira.html";
+},1600);
+
+},320);
+
+});
+
+</script>
+</body>
+</html>

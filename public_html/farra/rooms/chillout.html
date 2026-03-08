@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — Human Chillout</title>
+
+<style>
+
+body{
+margin:0;
+background:#0a0807;
+overflow:hidden;
+}
+
+/* SPACE */
+
+.room{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:flex-end;
+
+background:
+radial-gradient(circle at 50% 65%,rgba(255,150,90,.14),transparent 60%),
+linear-gradient(#0d0a08,#080706);
+}
+
+/* SOFA BLOBS */
+
+.sofa{
+position:absolute;
+bottom:0;
+width:320px;
+height:170px;
+background:linear-gradient(#151210,#070606);
+border-radius:30px 30px 0 0;
+filter:blur(.3px);
+opacity:.9;
+}
+
+.s1{left:12%}
+.s2{left:40%}
+.s3{left:70%}
+
+/* HUMAN SHADOW GROUPS */
+
+.group{
+position:absolute;
+bottom:140px;
+width:120px;
+height:120px;
+background:radial-gradient(circle,rgba(0,0,0,.75),transparent 70%);
+filter:blur(10px);
+opacity:.65;
+}
+
+.g1{left:20%}
+.g2{left:52%}
+.g3{left:78%}
+
+/* WARM AIR */
+
+.air{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 30% 40%,rgba(255,170,110,.09),transparent 60%),
+radial-gradient(circle at 70% 60%,rgba(255,150,90,.08),transparent 60%);
+mix-blend-mode:screen;
+animation:air 16s ease-in-out infinite alternate;
+}
+
+@keyframes air{
+from{transform:translateY(-8px)}
+to{transform:translateY(8px)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+<div class="air"></div>
+
+<div class="sofa s1"></div>
+<div class="sofa s2"></div>
+<div class="sofa s3"></div>
+
+<div class="group g1"></div>
+<div class="group g2"></div>
+<div class="group g3"></div>
+
+</div>
+
+<script>
+
+/* CONTINUITY SESSION */
+
+const mood=localStorage.getItem("farraSession")||"deep";
+
+/* MUSIC FROM DISTANCE */
+
+const club=new Audio(
+mood==="warm"
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+:"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+club.loop=true;
+club.volume=.06;   // VERY LOW — only background
+
+window.onclick=()=>club.play();
+
+/* TRUE WALK */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=6;
+if(e.key==="s") y-=6;
+if(e.key==="a") x+=6;
+if(e.key==="d") x-=6;
+
+room.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+/* RETURN STILL WARM */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="q") window.location.href="stillwarm.html";
+});
+
+/* ----------------------- */
+/* SOCIAL CONVERSATION CORE */
+/* ----------------------- */
+
+/* FIRST SOUND → arrive mid conversation */
+
+setTimeout(playConversation,1500);
+
+function playConversation(){
+
+let convo=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+convo.volume=.22;
+convo.play();
+
+}
+
+/* CONTINUOUS SOCIAL WORLD */
+
+setInterval(()=>{
+
+let v=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+v.volume=.18;
+v.play();
+
+},18000);
+
+/* MICRO SOCIAL REACTIONS */
+
+setInterval(()=>{
+
+if(Math.random()>.55)return;
+
+let laugh=new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_3e86e60c34.mp3");
+
+laugh.volume=.14;
+laugh.play();
+
+},26000);
+
+</script>
+</body>
+</html>

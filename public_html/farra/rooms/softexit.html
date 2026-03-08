@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — SOFT EXIT</title>
+
+<style>
+
+body{
+margin:0;
+background:#0a0d12;
+overflow:hidden;
+}
+
+/* OUTSIDE SPACE */
+
+.space{
+position:fixed;
+inset:0;
+
+background:
+linear-gradient(#0b0f18,#0e131b 60%,#131923),
+radial-gradient(circle at 50% 120%,rgba(120,150,200,.08),transparent 60%);
+}
+
+/* ground */
+
+.ground{
+position:absolute;
+bottom:0;
+width:100%;
+height:35%;
+background:linear-gradient(#0c0f14,#07090c);
+}
+
+/* distant wall of club */
+
+.wall{
+position:absolute;
+bottom:35%;
+left:45%;
+width:240px;
+height:260px;
+background:linear-gradient(#0c0c0c,#060606);
+opacity:.85;
+filter:blur(.2px);
+}
+
+/* faint interior light leaking */
+
+.wall::after{
+content:"";
+position:absolute;
+left:0;top:0;bottom:0;width:6px;
+background:linear-gradient(to right,
+rgba(255,120,60,.25),
+transparent);
+}
+
+/* fog / cold air */
+
+.air{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 30% 60%,rgba(180,200,255,.05),transparent 50%),
+radial-gradient(circle at 70% 40%,rgba(180,200,255,.04),transparent 60%);
+mix-blend-mode:screen;
+animation:air 18s linear infinite;
+}
+
+@keyframes air{
+0%{transform:translateX(0)}
+50%{transform:translateX(-40px)}
+100%{transform:translateX(0)}
+}
+
+/* vignette softness */
+
+.vignette{
+position:absolute;
+inset:0;
+background:radial-gradient(circle,transparent 60%,rgba(0,0,0,.55));
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="space" id="space">
+
+<div class="ground"></div>
+<div class="wall"></div>
+<div class="air"></div>
+<div class="vignette"></div>
+
+</div>
+
+<script>
+
+/* ---------------- TRUE WALK ---------------- */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=4;
+if(e.key==="s") y-=4;
+if(e.key==="a") x+=4;
+if(e.key==="d") x-=4;
+
+space.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+
+/* RETURN INSIDE (no UI, just instinct) */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="q") window.location.href="floor.html";
+});
+
+
+/* ---------------- DISTANT CLUB SOUND ---------------- */
+
+/*
+IMPORTANT:
+
+same track as club
+but far + filtered
+*/
+
+const base=new Audio(
+localStorage.getItem("farraSession")==="warm"
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+:"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+base.loop=true;
+base.volume=.05;
+
+/* faint wind layer */
+
+const wind=new Audio("https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3");
+wind.loop=true;
+wind.volume=.12;
+
+window.onclick=()=>{
+base.play();
+wind.play();
+};
+
+
+/* ---------------- DISTANT HUMAN EVENTS ---------------- */
+
+setInterval(()=>{
+
+if(Math.random()>.7)return;
+
+let v=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+v.volume=.03;
+
+setTimeout(()=>v.play(),Math.random()*4000);
+
+},50000);
+
+
+/* ---------------- VERY SLOW LIGHT SHIFT ---------------- */
+
+setInterval(()=>{
+
+document.body.style.transition="4s";
+document.body.style.filter="brightness(1.05)";
+
+setTimeout(()=>{
+document.body.style.filter="brightness(1)";
+},3000);
+
+},60000);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — Still Warm</title>
+
+<style>
+
+body{
+margin:0;
+background:#070606;
+overflow:hidden;
+}
+
+/* SPACE */
+
+.room{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:flex-end;
+background:
+radial-gradient(circle at 40% 70%,rgba(255,160,100,.12),transparent 60%),
+linear-gradient(#0b0b0b,#070707);
+}
+
+/* LOWER LEVEL FEEL */
+
+.floor{
+position:absolute;
+bottom:0;
+width:100%;
+height:260px;
+background:linear-gradient(to top,
+rgba(0,0,0,.95),
+rgba(0,0,0,.45),
+transparent);
+filter:blur(6px);
+}
+
+/* HEAT HAZE */
+
+.heat{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 30% 50%,rgba(255,160,100,.08),transparent 70%),
+radial-gradient(circle at 70% 60%,rgba(255,160,100,.07),transparent 70%);
+mix-blend-mode:screen;
+animation:heat 14s ease-in-out infinite alternate;
+}
+
+@keyframes heat{
+from{transform:translateY(-6px)}
+to{transform:translateY(6px)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+<div class="heat"></div>
+<div class="floor"></div>
+
+</div>
+
+<script>
+
+/* CONTINUOUS CLUB SOUND (DEEPER) */
+
+const mood=localStorage.getItem("farraSession") || "deep";
+
+const music=new Audio(
+mood==="warm"
+?"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+);
+
+music.loop=true;
+music.volume=.22;
+
+window.onclick=()=>music.play();
+
+/* TRUE WALK */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=6;
+if(e.key==="s") y-=6;
+if(e.key==="a") x+=6;
+if(e.key==="d") x-=6;
+
+room.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+/* RETURN MAIN FLOOR */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="q"){
+window.location.href="floor.html";
+}
+});
+
+/* HUMAN CLOSE PRESENCE */
+
+setInterval(()=>{
+
+if(Math.random()>.6)return;
+
+let v=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+v.volume=.11;
+v.play();
+
+},21000);
+
+</script>
+
+</body>
+</html>

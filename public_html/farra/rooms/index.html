@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — Exterior</title>
+
+<style>
+
+body{
+margin:0;
+background:#050505;
+overflow:hidden;
+font-family:sans-serif;
+}
+
+/* WORLD */
+
+.world{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 50% 70%,rgba(255,120,60,.05),transparent 60%),
+linear-gradient(#070707,#030303);
+}
+
+/* NEON */
+
+.neon{
+position:absolute;
+top:28%;
+left:50%;
+transform:translateX(-50%);
+font-size:72px;
+letter-spacing:14px;
+font-weight:bold;
+color:#ff6bdc;
+
+text-shadow:
+0 0 6px #ff6bdc,
+0 0 18px #ff6bdc,
+0 0 38px #3cf2ff;
+
+animation:flicker 4.8s infinite;
+}
+
+/* broken flicker */
+
+@keyframes flicker{
+
+0%,19%,21%,23%,80%,100%{opacity:1;}
+20%{opacity:.4;}
+22%{opacity:.2;}
+24%{opacity:.7;}
+81%{opacity:.3;}
+
+}
+
+/* SMOKE */
+
+.smoke{
+position:absolute;
+bottom:0;
+width:300px;
+height:220px;
+background:radial-gradient(circle,rgba(255,255,255,.05),transparent);
+filter:blur(22px);
+opacity:.4;
+animation:float 16s linear infinite;
+}
+
+.s1{left:10%}
+.s2{left:45%}
+.s3{left:75%}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-40px)}
+100%{transform:translateY(0)}
+}
+
+/* OUTSIDE PEOPLE SHADOWS */
+
+.person{
+position:absolute;
+bottom:0;
+width:60px;
+height:200px;
+background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+filter:blur(8px);
+opacity:.6;
+}
+
+.p1{left:18%}
+.p2{left:42%}
+.p3{left:70%}
+
+/* INVISIBLE ENTRY ZONE */
+
+.entry{
+position:fixed;
+inset:0;
+cursor:default;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="world">
+
+<div class="neon">FARRA!</div>
+
+<div class="smoke s1"></div>
+<div class="smoke s2"></div>
+<div class="smoke s3"></div>
+
+<div class="person p1"></div>
+<div class="person p2"></div>
+<div class="person p3"></div>
+
+<div class="entry" id="entry"></div>
+
+</div>
+
+
+<script>
+    
+/* NIGHT ARRIVAL MEMORY */
+
+if(!localStorage.getItem("farraArrival")){
+localStorage.setItem("farraArrival",Date.now());
+}
+    
+/* =========================
+   🌙 NIGHT MEMORY SYSTEM
+   ========================= */
+
+/* momento en que llegas al exterior */
+
+if(!localStorage.getItem("farraArrival")){
+localStorage.setItem("farraArrival",Date.now());
+}
+
+/* ---------- MUFFLED CLUB SOUND ---------- */
+
+const bass=new Audio(
+"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+);
+
+bass.loop=true;
+bass.volume=.09;
+
+document.addEventListener("click",()=>{
+bass.play().catch(()=>{});
+},{once:true});
+
+
+/* ---------- RANDOM OUTSIDE VOICES ---------- */
+
+function outsideVoices(){
+
+let sounds=[
+"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3",
+"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+];
+
+let v=new Audio(sounds[Math.floor(Math.random()*sounds.length)]);
+v.volume=.18;
+v.play();
+
+}
+
+setInterval(()=>{
+if(Math.random()>.5)outsideVoices();
+},18000);
+
+
+/* ---------- SOMEONE ASKS "VIENES?" ---------- */
+
+setTimeout(()=>{
+
+let ask=new Audio(
+"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+);
+
+ask.volume=.25;
+ask.play();
+
+},9000);
+
+
+/* ---------- GRAVITY ENTRY (NO DOOR) ---------- */
+
+let inside=false;
+
+document.addEventListener("wheel",e=>{
+
+if(inside)return;
+
+/* scroll down = acercarse */
+
+if(e.deltaY>0){
+
+bass.volume+=.01;
+
+if(bass.volume>.22){
+
+inside=true;
+
+document.body.style.transition="opacity 1.2s";
+document.body.style.opacity=0;
+
+/* calcular cuánto dudó fuera */
+
+let arrival=parseInt(localStorage.getItem("farraArrival"));
+let stayed=(Date.now()-arrival)/1000;
+
+/* clasificar momento */
+
+let phase="normal";
+
+if(stayed<25) phase="early";
+else if(stayed<90) phase="normal";
+else if(stayed<240) phase="late";
+else phase="dawn";
+
+localStorage.setItem("farraNightPhase",phase);
+
+setTimeout(()=>{
+window.location.href="floor.html";
+},900);
+
+}
+
+}
+
+});
+
+
+</script>
+
+</body>
+</html>

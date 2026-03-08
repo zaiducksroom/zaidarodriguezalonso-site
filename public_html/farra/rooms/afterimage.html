@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — AFTERIMAGE</title>
+
+<style>
+
+body{
+margin:0;
+background:#060606;
+overflow:hidden;
+}
+
+/* SAME CLUB BUT WRONG */
+
+.room{
+position:fixed;
+inset:0;
+
+background:
+radial-gradient(circle at 52% 58%,rgba(255,150,80,.05),transparent 60%),
+linear-gradient(#080707,#050505);
+}
+
+/* subtle doubled object */
+
+.echo{
+position:absolute;
+bottom:0;
+left:48%;
+width:120px;
+height:260px;
+background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+filter:blur(12px);
+opacity:.55;
+}
+
+/* ghost duplicate slightly shifted */
+
+.echo2{
+position:absolute;
+bottom:0;
+left:50%;
+width:120px;
+height:260px;
+background:linear-gradient(to top,rgba(0,0,0,.65),transparent);
+filter:blur(16px);
+opacity:.35;
+}
+
+/* perceptual vignette */
+
+.vignette{
+position:absolute;
+inset:0;
+background:radial-gradient(circle,transparent 45%,rgba(0,0,0,.6));
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+<div class="echo"></div>
+<div class="echo2"></div>
+<div class="vignette"></div>
+
+</div>
+
+<script>
+
+/* ---------------- TRUE WALK ---------------- */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=4;
+if(e.key==="s") y-=4;
+if(e.key==="a") x+=4;
+if(e.key==="d") x-=4;
+
+room.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+/* EXIT BACK TO CLUB */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="q") window.location.href="floor.html";
+});
+
+
+/* ---------------- SAME CLUB TRACK ---------------- */
+
+const base=new Audio(
+localStorage.getItem("farraSession")==="warm"
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+:"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+base.loop=true;
+base.volume=.14;
+
+
+/*
+IMPORTANT PART:
+
+create delayed ghost audio
+
+NOT new music
+NOT pitch change
+
+just slightly late perception
+*/
+
+const ghost=new Audio(base.src);
+ghost.loop=true;
+ghost.volume=.05;
+
+/* start with small temporal offset */
+
+window.onclick=()=>{
+
+base.play();
+
+setTimeout(()=>{
+ghost.play();
+},220);  /* tiny delay = perceptual distortion */
+
+};
+
+
+/* ---------------- LONG ECHO EVENTS ---------------- */
+
+setInterval(()=>{
+
+if(Math.random()>.45)return;
+
+let echo=new Audio(base.src);
+
+/* quiet, short, slightly delayed */
+
+echo.volume=.04;
+
+setTimeout(()=>{
+echo.play();
+},Math.random()*900);
+
+},32000);
+
+
+/* ---------------- RARE MEMORY VOICE ---------------- */
+
+/*
+Not conversation.
+Not people.
+
+More like remembered voice.
+*/
+
+setInterval(()=>{
+
+if(Math.random()>.78)return;
+
+let v=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+v.volume=.03;
+
+/* IMPORTANT: long delay before play */
+
+setTimeout(()=>{
+v.play();
+},Math.random()*6000);
+
+},55000);
+
+
+/* ---------------- LIGHT LAG EFFECT ---------------- */
+
+/*
+tiny brightness pulse late
+*/
+
+setInterval(()=>{
+
+document.body.style.transition="1.8s";
+document.body.style.filter="brightness(1.06)";
+
+setTimeout(()=>{
+document.body.style.filter="brightness(1)";
+},1400);
+
+},42000);
+
+
+
+</script>
+
+</body>
+
+<script src="../engine/club.js"></script>
+<script src="../engine/sound.js"></script>
+<script src="../engine/presence.js"></script>
+
+</html>

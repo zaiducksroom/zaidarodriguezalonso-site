@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA!</title>
+
+<style>
+body{
+margin:0;
+background:#040404;
+overflow:hidden;
+font-family:sans-serif;
+}
+
+/* WORLD */
+
+#world{
+position:fixed;
+width:5000px;
+height:3000px;
+}
+
+/* PLAYER */
+
+#camera{
+position:fixed;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:16px;
+height:16px;
+border-radius:50%;
+background:white;
+opacity:.25;
+pointer-events:none;
+}
+
+/* HINT */
+
+#hint{
+position:fixed;
+bottom:35px;
+left:50%;
+transform:translateX(-50%);
+color:rgba(255,255,255,.35);
+letter-spacing:.18em;
+font-size:14px;
+}
+
+/* EXTERIOR */
+
+.exterior{
+position:absolute;
+left:2200px;
+top:1200px;
+width:900px;
+height:520px;
+border-radius:40px;
+
+background:
+radial-gradient(circle at 40% 80%,rgba(255,120,70,.08),transparent 60%),
+linear-gradient(#090909,#040404);
+}
+
+/* NEON */
+
+.neon{
+position:absolute;
+left:2500px;
+top:1240px;
+
+font-size:80px;
+letter-spacing:.05em;
+
+color:#ff77cc;
+
+text-shadow:
+0 0 8px #ff77cc,
+0 0 20px #ff77cc,
+0 0 35px #4aa8ff,
+0 0 70px #4aa8ff;
+}
+
+/* INTERIOR */
+
+.main{
+position:absolute;
+left:2600px;
+top:900px;
+width:1000px;
+height:700px;
+
+border-radius:60px;
+
+background:
+radial-gradient(circle,rgba(255,110,60,.12),transparent 70%),
+#0a0a0a;
+}
+
+</style>
+</head>
+
+<body tabindex="0">
+
+<div id="world">
+
+<div class="exterior"></div>
+<div class="neon">FARRA!</div>
+<div class="main"></div>
+
+</div>
+
+<div id="camera"></div>
+<div id="hint">CLICK THEN USE WASD</div>
+
+<script>
+
+/* SAFE AUDIO (REAL FILE, NOT OSCILLATOR) */
+
+const music=new Audio(
+"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+music.loop=true;
+music.volume=.25;
+
+document.body.addEventListener("click",()=>{
+music.play().catch(()=>{});
+document.getElementById("hint").innerHTML="WASD TO WALK";
+},{once:true});
+
+/* PLAYER */
+
+let x=2600;
+let y=1500;
+let speed=5;
+let keys={};
+
+document.addEventListener("keydown",e=>{
+keys[e.key.toLowerCase()]=true;
+});
+
+document.addEventListener("keyup",e=>{
+keys[e.key.toLowerCase()]=false;
+});
+
+const world=document.getElementById("world");
+
+function loop(){
+
+if(keys["w"])y-=speed;
+if(keys["s"])y+=speed;
+if(keys["a"])x-=speed;
+if(keys["d"])x+=speed;
+
+x=Math.max(0,Math.min(5000,x));
+y=Math.max(0,Math.min(3000,y));
+
+world.style.transform=
+`translate(${-x+innerWidth/2}px,${-y+innerHeight/2}px)`;
+
+requestAnimationFrame(loop);
+}
+
+loop();
+
+let clubX=3100;
+let clubY=1250;
+
+let dx=x-clubX;
+let dy=y-clubY;
+
+let dist=Math.sqrt(dx*dx+dy*dy);
+
+let maxDist=1200;
+
+let vol=1-Math.min(dist/maxDist,1);
+
+music.volume=0.05+vol*0.35;
+
+function ghostPresence(){
+
+let ghost=document.createElement("div");
+
+ghost.style.position="absolute";
+ghost.style.left=(x+Math.random()*800-400)+"px";
+ghost.style.top=(y+Math.random()*600-300)+"px";
+ghost.style.width="20px";
+ghost.style.height="20px";
+ghost.style.background="white";
+ghost.style.opacity=".05";
+ghost.style.borderRadius="50%";
+
+world.appendChild(ghost);
+
+setTimeout(()=>{
+ghost.remove();
+},1200);
+
+}
+
+setInterval(()=>{
+if(Math.random()<0.3)ghostPresence();
+},4000);
+
+</script>
+</body>
+</html>

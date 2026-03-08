@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — Main Floor</title>
+
+<style>
+
+body{
+margin:0;
+background:#050505;
+overflow:hidden;
+}
+
+/* SPACE */
+
+.room{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:flex-end;
+background:
+radial-gradient(circle at 50% 60%,rgba(255,120,60,.09),transparent 60%),
+linear-gradient(#0a0a0a,#050505);
+}
+
+/* SOUNDSYSTEM (slightly off-center) */
+
+.system{
+position:absolute;
+bottom:140px;
+left:58%;
+transform:translateX(-50%);
+width:260px;
+height:320px;
+background:linear-gradient(#111,#050505);
+box-shadow:
+0 0 40px rgba(255,120,60,.12),
+0 0 120px rgba(0,0,0,.9);
+}
+
+/* INTERNAL CORE */
+
+.system::after{
+content:"";
+position:absolute;
+left:50%;
+top:60px;
+transform:translateX(-50%);
+width:60px;
+height:60px;
+background:radial-gradient(circle,rgba(255,150,90,.45),transparent 70%);
+filter:blur(8px);
+opacity:.6;
+}
+
+/* HUMAN MASS */
+
+.mass{
+position:absolute;
+bottom:0;
+width:120%;
+height:260px;
+background:linear-gradient(to top,
+rgba(0,0,0,.95),
+rgba(0,0,0,.4),
+transparent);
+filter:blur(10px);
+opacity:.75;
+}
+
+/* FOG */
+
+.fog{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 30% 40%,rgba(255,120,60,.06),transparent 60%),
+radial-gradient(circle at 70% 60%,rgba(255,120,60,.05),transparent 60%);
+mix-blend-mode:screen;
+animation:fog 18s linear infinite;
+}
+
+@keyframes fog{
+0%{transform:translateX(0)}
+50%{transform:translateX(-30px)}
+100%{transform:translateX(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+<div class="fog"></div>
+
+<div class="system"></div>
+
+<div class="mass"></div>
+
+</div>
+
+<script>
+
+/* SESSION SOUND CONTINUITY */
+
+const mood=localStorage.getItem("farraSession") || "deep";
+
+const bass=new Audio(
+mood==="warm"
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+:"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+bass.loop=true;
+bass.volume=.32;
+
+window.onclick=()=>bass.play();
+
+/* TRUE WALK */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=8;
+if(e.key==="s") y-=8;
+if(e.key==="a") x+=8;
+if(e.key==="d") x-=8;
+
+room.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+/* GO TO STILL WARM */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="e"){
+window.location.href="stillwarm.html";
+}
+});
+
+/* HUMAN MICRO WORLD */
+
+setInterval(()=>{
+
+if(Math.random()>.55)return;
+
+let v=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+v.volume=.14;
+v.play();
+
+},23000);
+
+</script>
+
+</body>
+</html>

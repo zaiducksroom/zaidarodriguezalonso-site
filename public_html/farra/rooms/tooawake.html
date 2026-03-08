@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — Too Awake</title>
+
+<style>
+
+body{
+margin:0;
+background:#0b0909;
+overflow:hidden;
+}
+
+/* SPACE */
+
+.room{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 50% 55%,rgba(255,90,160,.10),transparent 60%),
+linear-gradient(#0c0a0a,#070606);
+}
+
+/* UNEASY LIGHT */
+
+.neon{
+position:absolute;
+top:22%;
+left:55%;
+width:220px;
+height:4px;
+background:linear-gradient(90deg,#ff5cc8,#7b7bff);
+filter:blur(3px);
+opacity:.7;
+animation:flicker 3.5s infinite alternate;
+}
+
+@keyframes flicker{
+0%{opacity:.5}
+45%{opacity:.8}
+48%{opacity:.2}
+52%{opacity:.9}
+100%{opacity:.6}
+}
+
+/* ANGLED SHADOW GROUPS */
+
+.cluster{
+position:absolute;
+bottom:0;
+width:160px;
+height:260px;
+background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+filter:blur(10px);
+opacity:.65;
+}
+
+.c1{left:18%;transform:skewX(-6deg);}
+.c2{left:45%;transform:skewX(4deg);}
+.c3{left:72%;transform:skewX(-3deg);}
+
+/* HEAVIER AIR */
+
+.air{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 30% 40%,rgba(255,120,120,.08),transparent 60%),
+radial-gradient(circle at 70% 60%,rgba(150,120,255,.08),transparent 60%);
+mix-blend-mode:screen;
+animation:air 10s ease-in-out infinite alternate;
+}
+
+@keyframes air{
+from{transform:translateX(-12px)}
+to{transform:translateX(12px)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+<div class="air"></div>
+<div class="neon"></div>
+
+<div class="cluster c1"></div>
+<div class="cluster c2"></div>
+<div class="cluster c3"></div>
+
+</div>
+
+<script>
+
+/* CONTINUITY */
+
+const mood=localStorage.getItem("farraSession")||"deep";
+
+/* SAME CLUB TRACK (perception faster) */
+
+const club=new Audio(
+mood==="warm"
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+:"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+club.loop=true;
+club.volume=.12;  // slightly louder than chillout
+
+window.onclick=()=>club.play();
+
+/* TRUE WALK */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=7;
+if(e.key==="s") y-=7;
+if(e.key==="a") x+=7;
+if(e.key==="d") x-=7;
+
+room.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+/* RETURN CHILLOUT */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="q") window.location.href="chillout.html";
+});
+
+/* ---------- MENTAL DENSITY ENGINE ---------- */
+
+/* immediate overlapping voices */
+
+setTimeout(startMentalNoise,900);
+
+function startMentalNoise(){
+
+/* base loop */
+
+setInterval(playVoice,6000);
+
+/* random extra overlaps */
+
+setInterval(()=>{
+if(Math.random()>.55)playVoice();
+},4200);
+
+/* nervous spikes */
+
+setInterval(()=>{
+if(Math.random()>.6)return;
+
+let spike=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+spike.volume=.28;
+spike.play();
+
+},14000);
+
+}
+
+function playVoice(){
+
+let v=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+v.volume=.18 + Math.random()*0.1;
+v.play();
+
+}
+
+</script>
+</body>
+</html>

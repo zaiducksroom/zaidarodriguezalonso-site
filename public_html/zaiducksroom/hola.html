@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>hola :)</title>
+
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+
+<style>
+
+html,body{
+height:100%;
+margin:0;
+overflow:hidden;
+}
+
+body{
+background:linear-gradient(to bottom,#fffefb,#fff8f3,#fffdfa);
+font-family:'IBM Plex Mono', monospace;
+font-weight:300;
+font-size:14px;
+letter-spacing:0.05px;
+color:#444;
+opacity:0;
+transition:opacity 1.8s ease;
+position:relative;
+}
+
+body.visible{opacity:1;}
+
+.contenedor{
+max-width:520px;
+position:absolute;
+top:50%;
+left:12vw;
+transform:translateY(-50%);
+z-index:2;
+transition:opacity 1.2s ease;
+}
+
+.fade{
+opacity:0;
+transform:translateY(10px);
+transition:opacity 1.6s ease, transform 1.6s ease;
+}
+
+.fade.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+.bienvenida{
+font-family:Georgia, serif;
+font-size:22px;
+margin-bottom:10px;
+}
+
+.guard{
+font-size:14px;
+color:#666;
+margin-bottom:26px;
+}
+
+.frase{line-height:2.2;}
+
+.foto-zaida{
+margin-top:70px;
+width:105px;
+border-radius:8px;
+filter:contrast(104%) brightness(103%);
+box-shadow:0 10px 35px rgba(0,0,0,0.06);
+}
+
+
+/* 🌈 luz */
+
+.luz-prismatica{
+position:fixed;
+inset:-10%;
+pointer-events:none;
+z-index:-1;
+
+background-image:
+radial-gradient(ellipse at 72% 18%, rgba(170,210,255,.22), transparent 42%),
+radial-gradient(ellipse at 82% 28%, rgba(255,200,160,.18), transparent 48%),
+radial-gradient(ellipse at 68% 32%, rgba(210,170,255,.18), transparent 42%),
+radial-gradient(ellipse at 78% 40%, rgba(255,230,180,.15), transparent 48%),
+radial-gradient(ellipse at 88% 22%, rgba(190,255,230,.15), transparent 42%);
+
+filter:blur(42px);
+opacity:.72;
+animation:luzRespira 26s ease-in-out infinite;
+}
+
+@keyframes luzRespira{
+0%{transform:scale(1);opacity:.65;}
+50%{transform:scale(1.05);opacity:.82;}
+100%{transform:scale(1);opacity:.65;}
+}
+
+
+/* cierre */
+
+.cierre{
+position:fixed;
+right:10vw;
+bottom:9vh;
+max-width:260px;
+opacity:0;
+transform:translateY(10px);
+transition:opacity 1.6s ease, transform 1.6s ease;
+}
+
+.cierre.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+
+/* 🔥 BOTÓN VOLVER A ORIENTA */
+
+.volver{
+display:inline-block;
+margin-top:14px;
+width:34px;
+height:34px;
+border-radius:50%;
+
+background:radial-gradient(
+circle,
+rgba(255,240,200,1) 0%,
+rgba(255,220,150,.85) 28%,
+rgba(255,200,120,.45) 55%,
+rgba(255,180,90,.18) 72%,
+transparent 82%
+);
+
+cursor:pointer;
+transition:transform .6s ease;
+}
+
+.volver:hover{
+transform:scale(1.18);
+}
+
+
+/* velo */
+
+.velo{
+position:fixed;
+inset:0;
+background:#fffdfa;
+opacity:0;
+pointer-events:none;
+transition:opacity 1.4s cubic-bezier(.65,0,.35,1);
+}
+
+body.saliendo .velo{opacity:1;}
+
+
+/* firma */
+
+.firma-autora{
+position:fixed;
+bottom:18px;
+left:50%;
+transform:translateX(-50%);
+font-size:10.5px;
+letter-spacing:.25px;
+color:rgba(120,120,120,.42);
+opacity:0;
+transition:opacity 3s ease;
+}
+
+.firma-autora.visible{opacity:1;}
+
+</style>
+</head>
+
+<body>
+
+<div class="luz-prismatica"></div>
+
+<div class="contenedor">
+<div class="bienvenida fade"></div>
+<div class="guard fade"></div>
+<div class="frase fade"></div>
+<img src="foto zaida.jpeg" class="foto-zaida fade">
+</div>
+
+<div class="cierre">
+<p class="cierre1"></p>
+<p class="mail-text cierre2"></p>
+
+<p style="margin-top:14px;">zaiducksroom@gmail.com</p>
+
+<div class="volver" onclick="volver()"></div>
+
+</div>
+
+<div class="velo"></div>
+<div class="firma-autora"></div>
+
+<script>
+
+/* LANG */
+
+let lang=localStorage.getItem("lang");
+
+if(!lang){
+const nav=navigator.language.slice(0,2);
+lang=nav==="es"?"es":"en";
+localStorage.setItem("lang",lang);
+}
+
+document.documentElement.setAttribute("lang",lang);
+
+
+/* TEXTOS */
+
+const textos={
+es:{
+bienvenida:"bienvenida",
+guard:"puedes bajar la guardia aquí",
+frase:`soy zaida.<br><br>
+me interesa comprender cómo vivimos<br>
+y diseñar espacios que puedan habitarse`,
+cierre1:"esto sigue abierto",
+cierre2:`si este lugar te dijo algo<br>puedes escribirme`,
+firma:"espacio creado en diálogo con inteligencia artificial"
+},
+en:{
+bienvenida:"welcome",
+guard:"you can let your guard down here",
+frase:`i'm zaida.<br><br>
+i’m interested in understanding how we live<br>
+and designing spaces that can be inhabited`,
+cierre1:"this remains open",
+cierre2:`if this place told you something<br>you can write to me`,
+firma:"a space created in dialogue with artificial intelligence"
+}
+};
+
+function write(sel,val){
+const el=document.querySelector(sel);
+if(el) el.innerHTML=val;
+}
+
+write(".bienvenida",textos[lang].bienvenida);
+write(".guard",textos[lang].guard);
+write(".frase",textos[lang].frase);
+write(".cierre1",textos[lang].cierre1);
+write(".cierre2",textos[lang].cierre2);
+write(".firma-autora",textos[lang].firma);
+
+
+/* coreografía */
+
+setTimeout(()=>document.body.classList.add("visible"),120);
+
+const fades=document.querySelectorAll(".fade");
+
+setTimeout(()=>fades[0].classList.add("visible"),700);
+setTimeout(()=>fades[1].classList.add("visible"),1500);
+setTimeout(()=>fades[2].classList.add("visible"),2400);
+setTimeout(()=>fades[3].classList.add("visible"),3400);
+
+setTimeout(()=>document.querySelector(".cierre").classList.add("visible"),4600);
+setTimeout(()=>document.querySelector(".firma-autora").classList.add("visible"),8200);
+
+
+/* 🔥 VOLVER A ORIENTA */
+
+function volver(){
+
+document.querySelector(".contenedor").style.opacity="0";
+document.querySelector(".cierre").style.opacity="0";
+
+document.body.classList.add("saliendo");
+
+setTimeout(()=>{
+window.location.href="about-ux.html";
+},1100);
+
+}
+
+</script>
+
+</body>
+</html>

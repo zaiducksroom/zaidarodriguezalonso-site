@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>amanece</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+overflow:hidden;
+
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+
+background:linear-gradient(
+to bottom,
+#f1dcc2,
+#f6e6d1,
+#f9f2e8
+);
+
+font-family:Georgia,serif;
+color:#5a4c42;
+
+opacity:0;
+transition:opacity 2.4s ease;
+}
+
+body.visible{ opacity:1; }
+
+/* 🌄 SOL */
+
+.luz{
+position:fixed;
+left:50%;
+bottom:-240px;
+width:1100px;
+height:720px;
+transform:translateX(-50%) scale(.55);
+border-radius:50%;
+
+background:radial-gradient(
+ellipse,
+rgba(255,240,210,.92) 0%,
+rgba(255,225,180,.60) 40%,
+rgba(255,205,150,.30) 65%,
+transparent 80%
+);
+
+filter:blur(65px);
+opacity:0;
+
+transition:
+opacity 6.5s ease,
+transform 10s cubic-bezier(.22,.7,.2,1),
+filter .8s ease;
+}
+
+/* subida */
+
+body.amanecer .luz{
+opacity:1;
+transform:translateX(-50%) translateY(-140px) scale(1);
+}
+
+/* respiración solar */
+
+body.respira .luz{
+animation:respiraSol 18s ease-in-out infinite;
+}
+
+@keyframes respiraSol{
+0%{ transform:translateX(-50%) translateY(-140px) scale(1); }
+50%{ transform:translateX(-50%) translateY(-140px) scale(1.04); }
+100%{ transform:translateX(-50%) translateY(-140px) scale(1); }
+}
+
+/* ⭐ cuando ya se puede salir → micro invitación */
+
+body.interactivo .luz{
+filter:blur(58px) brightness(1.05);
+cursor:pointer;
+}
+
+/* hover perceptivo */
+
+body.interactivo .luz:hover{
+filter:blur(52px) brightness(1.12);
+transform:translateX(-50%) translateY(-140px) scale(1.06);
+}
+
+/* 🌫️ noche */
+
+.velo-noche{
+position:fixed;
+inset:0;
+background:#151723;
+opacity:.55;
+pointer-events:none;
+transition:opacity 7s ease;
+}
+
+body.amanecer .velo-noche{ opacity:0; }
+
+/* TEXTO */
+
+.mensaje{
+opacity:0;
+transition:opacity 2.6s ease;
+z-index:5;
+}
+
+.mensaje.visible{ opacity:1; }
+
+.frase-secundaria{
+margin-top:16px;
+font-size:0.9rem;
+opacity:0;
+transition:opacity 2.8s ease;
+}
+
+.frase-secundaria.visible{ opacity:0.6; }
+
+</style>
+</head>
+
+<body>
+
+<div class="velo-noche"></div>
+<div class="luz"></div>
+
+<div class="mensaje">
+<div class="frase-principal"></div>
+<div class="frase-secundaria"></div>
+</div>
+
+<script>
+
+/* LANG */
+
+let lang=localStorage.getItem("lang");
+
+if(!lang){
+const nav=navigator.language.slice(0,2);
+lang=nav==="es"?"es":"en";
+localStorage.setItem("lang",lang);
+}
+
+document.documentElement.setAttribute("lang",lang);
+
+/* TEXT */
+
+const textos={
+es:{
+principal:"puedes empezar de nuevo",
+secundaria:"todas las veces que lo necesites"
+},
+en:{
+principal:"you can begin again",
+secundaria:"as many times as you need"
+}
+};
+
+document.querySelector(".frase-principal").textContent=textos[lang].principal;
+document.querySelector(".frase-secundaria").textContent=textos[lang].secundaria;
+
+/* entrada */
+
+setTimeout(()=>document.body.classList.add("visible"),120);
+
+/* pausa */
+
+setTimeout(()=>document.body.classList.add("amanecer"),1600);
+
+/* respiración */
+
+setTimeout(()=>document.body.classList.add("respira"),10500);
+
+/* texto */
+
+setTimeout(()=>document.querySelector(".mensaje").classList.add("visible"),7000);
+setTimeout(()=>document.querySelector(".frase-secundaria").classList.add("visible"),9200);
+
+/* ⭐ ACTIVAR INTERACCIÓN SOLO CUANDO NARRATIVAMENTE TOCA */
+
+let listo=false;
+
+setTimeout(()=>{
+listo=true;
+document.body.classList.add("interactivo");
+},10500);
+
+/* ⭐ SALIDA CON RESPETO VISUAL */
+
+document.querySelector(".luz").addEventListener("click",()=>{
+
+if(!listo) return;
+
+document.body.style.transition="opacity 2.2s ease";
+document.body.style.opacity="0";
+
+setTimeout(()=>{
+window.location.href="hola.html";
+},1600);
+
+});
+
+/* fallback click general */
+
+document.addEventListener("click",(e)=>{
+
+if(!listo) return;
+if(e.target.closest(".luz")) return;
+
+document.body.style.opacity="0";
+
+setTimeout(()=>{
+window.location.href="orienta.html";
+},1600);
+
+});
+
+</script>
+</body>
+</html>

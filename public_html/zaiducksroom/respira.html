@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>respira</title>
+
+<style>
+
+html,body{
+margin:0;
+height:100%;
+overflow:hidden;
+}
+
+body{
+
+opacity:0;
+
+background:radial-gradient(
+circle at center,
+#ffdca8 0%,
+#f4b96e 40%,
+#d88a3c 75%,
+#a86128 100%
+);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+transition:opacity 1.8s ease;
+}
+
+body.visible{opacity:1;}
+
+/* LUZ */
+
+.luz{
+
+position:fixed;
+width:560px;
+height:560px;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-50%) scale(.55);
+border-radius:50%;
+
+background:
+
+radial-gradient(circle,
+rgba(255,240,190,0.98) 0%,
+rgba(255,220,150,0.95) 18%,
+rgba(255,200,120,0.85) 30%,
+rgba(240,170,95,0.55) 48%,
+rgba(215,140,60,0.28) 64%,
+transparent 80%),
+
+radial-gradient(circle,
+rgba(255,230,170,.55),
+rgba(235,170,90,.28),
+transparent 75%);
+
+filter:blur(36px);
+}
+
+
+/* MENSAJE */
+
+.mensaje{
+position:fixed;
+bottom:20vh;
+font-family:Georgia,serif;
+font-size:15px;
+letter-spacing:.3px;
+color:rgba(90,60,30,.55);
+opacity:0;
+transform:translateY(8px);
+transition:3s ease;
+}
+
+.mensaje.visible{
+opacity:.75;
+transform:translateY(0);
+cursor:pointer;
+}
+
+/* VELO */
+
+.velo{
+position:fixed;
+inset:0;
+
+background:radial-gradient(circle,
+#e7c395 0%,
+#caa06f 40%,
+#3a3f6b 75%,
+#0c1022 100%);
+
+opacity:0;
+pointer-events:none;
+transition:opacity 2.8s cubic-bezier(.65,0,.35,1);
+}
+
+body.saliendo .velo{opacity:1;}
+
+</style>
+</head>
+
+<body>
+
+<div class="luz"></div>
+<div class="mensaje"></div>
+<div class="velo"></div>
+
+<audio id="audio" autoplay loop>
+<source src="luz.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* LANG */
+
+let sistemaRegulado=false;
+
+let lang=localStorage.getItem("lang");
+if(!lang){
+const nav=navigator.language.slice(0,2);
+lang=nav==="es"?"es":"en";
+localStorage.setItem("lang",lang);
+}
+document.documentElement.setAttribute("lang",lang);
+
+
+/* TEXT */
+
+const textos={
+es:"continúa cuando lo necesites",
+en:"continue whenever you need"
+};
+
+const mensaje=document.querySelector(".mensaje");
+mensaje.textContent=textos[lang];
+
+const luz=document.querySelector(".luz");
+
+setTimeout(()=>document.body.classList.add("visible"),160);
+
+
+/* =====================================================
+🔥 RESPIRACIÓN FÍSICA CONTINUA (SIN SALTOS)
+===================================================== */
+
+let fase=0;              // ← clave absoluta
+let ultimoFrame=performance.now();
+
+let velocidadUsuario=0;
+let ultimaPos={x:0,y:0};
+let ultimoMovimiento=Date.now();
+
+document.addEventListener("mousemove",(e)=>{
+
+const dx=Math.abs(e.clientX-ultimaPos.x);
+const dy=Math.abs(e.clientY-ultimaPos.y);
+const distancia=dx+dy;
+
+ultimaPos={x:e.clientX,y:e.clientY};
+
+velocidadUsuario=velocidadUsuario*0.85+distancia*0.15;
+ultimoMovimiento=Date.now();
+
+});
+
+
+function respirar(now){
+
+const dt=(now-ultimoFrame)/1000;
+ultimoFrame=now;
+
+/* ansiedad narrativa */
+
+let baseVel;
+
+const tiempo=(now)/1000;
+
+if(tiempo<3) baseVel=3.2;
+else if(tiempo<10) baseVel=2.0;
+else if(tiempo<18) baseVel=1.4;
+else baseVel=0.95;
+
+/* influencia usuario */
+
+let nervio=sistemaRegulado?0:Math.min(velocidadUsuario/60,1.2);
+
+let velocidad=(baseVel+nervio*1.3);
+
+/* quietud profunda */
+
+if(Date.now()-ultimoMovimiento>2200) velocidad*=0.6;
+
+/* ⭐ AQUÍ ESTÁ LA MAGIA */
+
+fase+=velocidad*dt*2.2;
+
+/* seno continuo SIN saltos */
+
+let breath=(Math.sin(fase)+1)/2;
+
+let escala=.58+breath*.42;
+
+luz.style.transform=
+`translate(-50%,-50%) scale(${escala})`;
+
+luz.style.filter=
+`blur(${34+breath*16}px)`;
+
+requestAnimationFrame(respirar);
+
+}
+
+requestAnimationFrame(respirar);
+
+
+/* =====================================================
+AUDIO FADE
+===================================================== */
+
+const audio=document.getElementById("audio");
+audio.volume=0;
+
+let vol=0;
+const subida=setInterval(()=>{
+if(vol<0.05){vol+=0.0015;audio.volume=vol;}
+else clearInterval(subida);
+},160);
+
+
+/* =====================================================
+🔥 CALMA REAL → MENSAJE → TRANSICIÓN VIVA
+===================================================== */
+
+let inicioCalma=null;
+
+function checkCalma(){
+
+if(Date.now()-ultimoMovimiento>3000){
+
+if(!inicioCalma) inicioCalma=Date.now();
+
+}else inicioCalma=null;
+
+if(!sistemaRegulado && inicioCalma && performance.now()>20000){
+
+sistemaRegulado=true;
+
+mensaje.classList.add("visible");
+
+/* ⭐ transición respirando */
+
+mensaje.addEventListener("click",()=>{
+
+document.body.classList.add("saliendo");
+
+/* guardar origen para orienta */
+
+localStorage.setItem("viene_de_respira","1");
+
+/* salida sincronizada con respiración */
+
+setTimeout(()=>{
+window.location.href="confia.html";
+},2800);
+
+});
+
+return;
+}
+
+requestAnimationFrame(checkCalma);
+
+}
+
+checkCalma();
+
+</script>
+</body>
+</html>

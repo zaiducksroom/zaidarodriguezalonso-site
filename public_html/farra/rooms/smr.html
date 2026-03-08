@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FARRA! — SMR</title>
+
+<style>
+
+body{
+margin:0;
+background:#070606;
+overflow:hidden;
+}
+
+/* SMALL SPACE */
+
+.room{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 50% 70%,rgba(255,160,90,.06),transparent 60%),
+linear-gradient(#090808,#060505);
+}
+
+/* SMALL LAMP */
+
+.lamp{
+position:absolute;
+bottom:38%;
+left:58%;
+width:14px;
+height:14px;
+background:#ffb47a;
+border-radius:50%;
+box-shadow:0 0 50px rgba(255,160,90,.25);
+}
+
+/* SITTING SHADOW */
+
+.shadow{
+position:absolute;
+bottom:0;
+left:42%;
+width:120px;
+height:220px;
+background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+filter:blur(10px);
+opacity:.65;
+}
+
+/* CLOSE WALL FEEL */
+
+.vignette{
+position:absolute;
+inset:0;
+background:radial-gradient(circle,transparent 40%,rgba(0,0,0,.55));
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+<div class="lamp"></div>
+<div class="shadow"></div>
+<div class="vignette"></div>
+
+</div>
+
+<script>
+
+/* TRUE WALK */
+
+let x=0;
+let y=0;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="w") y+=5;
+if(e.key==="s") y-=5;
+if(e.key==="a") x+=5;
+if(e.key==="d") x-=5;
+
+room.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+/* RETURN TO TOO AWAKE */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="q") window.location.href="tooawake.html";
+});
+
+/* -------- SILENCE ENGINE -------- */
+
+/* extremely distant club */
+
+const club=new Audio(
+localStorage.getItem("farraSession")==="warm"
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_4c4c8f0d4c.mp3"
+:"https://cdn.pixabay.com/audio/2022/10/16/audio_12c6d1c57c.mp3"
+);
+
+club.loop=true;
+club.volume=.02;
+
+window.onclick=()=>club.play();
+
+/* -------- BREATH / FABRIC MICRO -------- */
+
+setInterval(()=>{
+
+if(Math.random()>.55)return;
+
+let micro=new Audio(
+Math.random()>.5
+?"https://cdn.pixabay.com/audio/2022/03/15/audio_3e86e60c34.mp3"
+:"https://cdn.pixabay.com/audio/2022/03/24/audio_8c21b0bb56.mp3"
+);
+
+micro.volume=.05;
+micro.play();
+
+},28000);
+
+
+/* -------- THE IMPORTANT PART: HUMAN SNIFF -------- */
+
+/*
+No cada rato.
+No predecible.
+Debe parecer humano real.
+*/
+
+setInterval(()=>{
+
+/* VERY RARE */
+
+if(Math.random()>.32)return;
+
+/* small delay so not periodic */
+
+setTimeout(()=>{
+
+let sniff=new Audio(
+"https://cdn.pixabay.com/audio/2022/03/10/audio_1f3b24e0e3.mp3"
+);
+
+/*
+IMPORTANT:
+lower volume first
+then micro rise
+→ feels like someone close
+*/
+
+sniff.volume=.06 + Math.random()*0.04;
+sniff.play();
+
+},Math.random()*8000);
+
+},47000);
+
+
+/* -------- VERY RARE BODY SHIFT -------- */
+
+setInterval(()=>{
+
+if(Math.random()>.75)return;
+
+let move=new Audio(
+"https://cdn.pixabay.com/audio/2022/03/15/audio_c6a64d1c89.mp3"
+);
+
+move.volume=.04;
+move.play();
+
+},65000);
+
+</script>
+
+</body>
+</html>

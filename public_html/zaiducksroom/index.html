@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>zaiduck’s room</title>
+
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+
+<style>
+
+body{
+margin:0;
+background:#fffdf9;
+font-family:'IBM Plex Mono', monospace;
+font-weight:300;
+font-size:14px;
+letter-spacing:0.05px;
+color:#444;
+
+height:100vh;
+overflow:hidden;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+opacity:0;
+transition:opacity 1.6s ease;
+}
+
+body.visible{opacity:1;}
+
+.wrapper{
+display:flex;
+align-items:center;
+gap:72px;
+width:90vw;
+max-width:1200px;
+}
+
+.intro{max-width:240px;}
+
+.fade{
+opacity:0;
+transform:translateY(8px);
+transition:opacity 1.6s ease, transform 1.6s ease;
+}
+.fade.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+h1{
+font-family:Georgia, serif;
+font-size:24px;
+font-weight:normal;
+margin-bottom:6px;
+}
+
+.sub-english{
+margin-top:4px;
+font-size:13px;
+color:#8a8a8a;
+}
+
+.idiomas{
+margin-top:22px;
+font-size:12px;
+display:flex;
+gap:14px;
+opacity:0;
+transform:translateY(6px);
+transition:opacity 1.8s ease, transform 1.8s ease;
+}
+
+.idiomas.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+.idiomas span{
+cursor:pointer;
+color:#9a9a9a;
+}
+.idiomas .activo{color:#4a4a4a;}
+
+.room{position:relative;}
+
+.room img{
+height:82vh;
+filter:blur(6px);
+transform:scale(1.02);
+transition:filter 1.4s cubic-bezier(.22,.7,.2,1),
+transform 1.8s cubic-bezier(.22,.7,.2,1);
+}
+
+.room.activa img{
+filter:blur(0);
+transform:scale(1);
+}
+
+/* HALO */
+
+.cama-luz{
+position:fixed;
+width:150px;
+height:150px;
+border-radius:50%;
+pointer-events:none;
+
+background:radial-gradient(
+circle,
+rgba(255,248,230,.85),
+rgba(255,248,230,.35),
+transparent 70%
+);
+
+opacity:0;
+transition:opacity .5s ease, transform .6s ease;
+}
+
+/* VELO */
+
+.velo{
+position:fixed;
+width:140px;
+height:140px;
+left:46%;
+top:63%;
+transform:translate(-50%,-50%) scale(0);
+border-radius:50%;
+background:#1f1f1f;
+pointer-events:none;
+z-index:9999;
+transition:transform 1.6s cubic-bezier(.22,.7,.2,1);
+}
+
+body.transicion-activa .velo{
+transform:translate(-50%,-50%) scale(28);
+}
+
+/* HITBOX */
+
+.cama-hitbox{
+position:absolute;
+bottom:18%;
+left:28%;
+width:320px;
+height:200px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="intro">
+<h1 class="fade">zaiduck’s room</h1>
+<p class="fade">en construcción diaria</p>
+<p class="sub-english fade">becoming, slowly</p>
+
+<div class="idiomas">
+<span data-lang="es">español</span>
+<span data-lang="en">english</span>
+</div>
+</div>
+
+<div class="room">
+<img src="habitacion 1.jpeg">
+<div class="cama-luz"></div>
+<a href="conciencia.html" class="cama-hitbox"></a>
+</div>
+
+</div>
+
+<div class="velo"></div>
+
+<script>
+
+/* ===============================
+ENTRADA CINE
+=============================== */
+
+setTimeout(()=>document.body.classList.add("visible"),120);
+
+const fades=document.querySelectorAll(".fade");
+
+setTimeout(()=>fades[0].classList.add("visible"),700);
+setTimeout(()=>fades[1].classList.add("visible"),1600);
+setTimeout(()=>fades[2].classList.add("visible"),2500);
+
+setTimeout(()=>{
+document.querySelector(".idiomas").classList.add("visible");
+},3600);
+
+
+/* ===============================
+LANG
+=============================== */
+
+localStorage.removeItem("lang");
+
+let idiomaSeleccionado=false;
+
+const botones=document.querySelectorAll(".idiomas span");
+const room=document.querySelector(".room");
+const cama=document.querySelector(".cama-hitbox");
+const luz=document.querySelector(".cama-luz");
+
+
+botones.forEach(btn=>{
+btn.addEventListener("click",()=>{
+
+const lang=btn.dataset.lang;
+
+localStorage.setItem("lang",lang);
+document.documentElement.setAttribute("lang",lang);
+
+botones.forEach(b=>b.classList.remove("activo"));
+btn.classList.add("activo");
+
+room.classList.add("activa");
+idiomaSeleccionado=true;
+
+});
+});
+
+
+
+
+
+/* ===============================
+🔥 MAPPING PERCEPTIVO DIOS
+=============================== */
+
+let ultimaInteraccion=Date.now();
+
+document.addEventListener("mousemove",(e)=>{
+
+const rect=luz.getBoundingClientRect();
+
+/* habitación respira */
+const x=(e.clientX/window.innerWidth-.5)*2;
+const y=(e.clientY/window.innerHeight-.5)*2;
+
+room.style.transform=`translate(${x*6}px,${y*4}px)`;
+
+/* luz perfectamente centrada */
+luz.style.left=(e.clientX-rect.width/2)+"px";
+luz.style.top=(e.clientY-rect.height/2)+"px";
+
+ultimaInteraccion=Date.now();
+
+});
+
+function detectarCercania(){
+
+if(!idiomaSeleccionado){
+requestAnimationFrame(detectarCercania);
+return;
+}
+
+const rect=cama.getBoundingClientRect();
+
+const cx=rect.left+rect.width/2;
+const cy=rect.top+rect.height/2;
+
+const mouseX=parseFloat(luz.style.left)+75;
+const mouseY=parseFloat(luz.style.top)+75;
+
+const dx=mouseX-cx;
+const dy=mouseY-cy;
+
+const dist=Math.sqrt(dx*dx+dy*dy);
+
+/* cerca → halo */
+
+if(dist<260){
+luz.style.opacity="1";
+}else{
+luz.style.opacity="0";
+}
+
+/* usuario perdido 7s → ayuda invisible */
+
+if(Date.now()-ultimaInteraccion>7000){
+luz.style.opacity=".55";
+luz.style.transform="scale(1.3)";
+}
+
+requestAnimationFrame(detectarCercania);
+
+}
+
+detectarCercania();
+
+
+/* ===============================
+TRANSICIÓN
+=============================== */
+
+cama.addEventListener("click",function(e){
+
+if(!idiomaSeleccionado){
+e.preventDefault();
+return;
+}
+
+e.preventDefault();
+
+luz.style.opacity="1";
+luz.style.transform="scale(1.5)";
+
+room.style.transition="transform 2.2s cubic-bezier(.22,.7,.2,1)";
+room.style.transform="scale(1.05)";
+
+setTimeout(()=>{
+document.body.classList.add("transicion-activa");
+},260);
+
+setTimeout(()=>{
+window.location.href=this.href;
+},2400);
+
+});
+
+</script>
+</body>
+</html>

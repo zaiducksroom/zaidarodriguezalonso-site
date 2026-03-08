@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>confía</title>
+
+<style>
+
+html,body{height:100%;}
+
+body{
+margin:0;
+overflow:hidden;
+position:relative;
+
+opacity:0;
+transition:opacity 3.2s cubic-bezier(.45,0,.25,1);
+
+background:radial-gradient(circle at 70% 60%,
+#2e3c63 0%,#1c2547 35%,#141a33 65%,#0c1022 100%);
+
+background-image:
+radial-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),
+radial-gradient(circle at 70% 60%,
+#2e3c63 0%,#1c2547 35%,#141a33 65%,#0c1022 100%);
+
+background-size:3px 3px,cover;
+}
+
+body.visible{opacity:1;}
+
+
+/* CAMINO */
+
+.camino{
+position:absolute;
+width:2600px;
+height:160px;
+left:-900px;
+bottom:-13px;
+
+transform:rotate(-18deg) perspective(700px) rotateX(60deg);
+
+border-radius:120px;
+
+background:linear-gradient(
+to right,
+rgba(92,58,38,0.00) 0%,
+rgba(120,72,45,0.10) 18%,
+rgba(148,88,56,0.34) 40%,
+rgba(168,98,60,0.58) 55%,
+rgba(148,88,56,0.42) 72%,
+rgba(110,66,42,0.18) 88%,
+transparent 100%);
+
+filter:blur(1.2px);
+}
+
+
+/* 🌟 LUZ */
+
+.luz{
+
+position:absolute;
+z-index:2;
+
+width:320px;
+height:320px;
+
+left:75%;
+top:25%;
+
+transform:translate(-50%,-50%) scale(.6);
+
+background:radial-gradient(circle,
+rgba(255,240,220,0.34),
+rgba(255,240,220,0.16),
+rgba(255,240,220,0.05),
+transparent 72%);
+
+cursor:pointer;
+
+transition:transform .8s ease, opacity .8s ease;
+
+opacity:0;
+
+}
+
+.luz.visible{opacity:1;}
+
+</style>
+</head>
+
+<body>
+
+<audio autoplay loop id="audio">
+<source src="confia2.mp3" type="audio/mpeg">
+</audio>
+
+<div class="camino"></div>
+<div class="luz"></div>
+
+<script>
+
+/* LANG */
+
+let lang=localStorage.getItem("lang");
+if(!lang){
+const nav=navigator.language.slice(0,2);
+lang=nav==="es"?"es":"en";
+localStorage.setItem("lang",lang);
+}
+document.documentElement.setAttribute("lang",lang);
+
+
+/* ENTRADA */
+
+setTimeout(()=>document.body.classList.add("visible"),180);
+
+
+/* AUDIO */
+
+const audio=document.getElementById("audio");
+audio.volume=0;
+
+let vol=0;
+const fade=setInterval(()=>{
+if(vol<0.045){vol+=0.0015;audio.volume=vol;}
+else clearInterval(fade);
+},160);
+
+
+/* =====================================================
+🔥 RESPIRACIÓN CONTINUA (HEREDADA)
+===================================================== */
+
+const luz=document.querySelector(".luz");
+
+/* aparece primero */
+
+setTimeout(()=>luz.classList.add("visible"),800);
+
+
+/* fase inicial calmada */
+
+let fase=Math.random()*3; 
+let ultimo=performance.now();
+
+function respirar(now){
+
+const dt=(now-ultimo)/1000;
+ultimo=now;
+
+/* ritmo calmado SI VIENE DE RESPIRA */
+
+let vieneRespira=localStorage.getItem("viene_de_respira");
+
+let velocidad=vieneRespira?0.8:1.4;
+
+/* avanzar fase continua */
+
+fase+=velocidad*dt*2;
+
+let breath=(Math.sin(fase)+1)/2;
+
+/* escala suave */
+
+let escala=.82+breath*.28;
+
+luz.style.transform=
+`translate(-50%,-50%) scale(${escala})`;
+
+requestAnimationFrame(respirar);
+
+}
+
+requestAnimationFrame(respirar);
+
+
+/* limpiar flag */
+
+localStorage.removeItem("viene_de_respira");
+
+
+/* =====================================================
+CLICK → VIAJE (POSICIÓN REAL)
+===================================================== */
+
+luz.addEventListener("click",()=>{
+
+const rect=luz.getBoundingClientRect();
+
+const pos={
+x:(rect.left+rect.width/2)/window.innerWidth,
+y:(rect.top+rect.height/2)/window.innerHeight
+};
+
+localStorage.setItem("luz_confia_pos",JSON.stringify(pos));
+localStorage.setItem("viene_de_confia","1");
+
+/* aceptación */
+
+luz.style.transform+=" scale(.92)";
+
+/* crecimiento */
+
+setTimeout(()=>{
+luz.style.transition="transform 3s cubic-bezier(.22,.7,.2,1), opacity 2s";
+luz.style.transform="translate(-50%,-50%) scale(3.2)";
+luz.style.opacity=".6";
+},280);
+
+/* fade */
+
+setTimeout(()=>{
+document.body.style.transition="opacity 2.2s ease";
+document.body.style.opacity="0";
+},1600);
+
+setTimeout(()=>{
+window.location.href="orienta.html";
+},3300);
+
+});
+
+
+/* =====================================================
+CAMINO REACCIÓN SUAVE
+===================================================== */
+
+const camino=document.querySelector(".camino");
+
+document.addEventListener("mousemove",(e)=>{
+
+const x=e.clientX/window.innerWidth;
+const y=e.clientY/window.innerHeight;
+
+camino.style.transform=
+`rotate(-18deg)
+perspective(700px)
+rotateX(60deg)
+translateX(${(x-.5)*16}px)
+translateY(${(y-.5)*6}px)`;
+
+});
+
+</script>
+</body>
+</html>

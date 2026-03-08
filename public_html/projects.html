@@ -1,0 +1,603 @@
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8"><title>UX Projects — Zaida Rodríguez Alonso</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="UX design portfolio of Zaida Rodríguez Alonso. Case studies exploring calm digital systems, cultural interfaces and experimental UX environments."><meta name="author" content="Zaida Rodríguez Alonso"><meta name="keywords" content="UX designer portfolio, UX case studies, digital experience design, interaction design, cultural UX"><link rel="canonical" href="https://zaidarodriguezalonso.com/projects.html"><!-- Open Graph --><meta property="og:title" content="UX Projects — Zaida Rodríguez Alonso">
+<meta property="og:description" content="UX portfolio exploring digital environments, cultural interfaces and experimental UX systems.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zaidarodriguezalonso.com/projects.html"><!-- Twitter --><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UX Projects — Zaida Rodríguez Alonso">
+<meta name="twitter:description" content="UX portfolio exploring calm digital systems and digital environments."><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+
+/* 🌅 FONDO AMANECER */
+
+body{
+margin:0;
+font-family:Georgia,serif;
+padding:80px 28px;
+max-width:1100px;
+margin:auto;
+line-height:1.8;
+position:relative;
+overflow-x:hidden;
+
+background:linear-gradient(
+to bottom,
+#f1dcc2,
+#f6e6d1 35%,
+#f9f2e8 70%,
+#ffffff 100%
+);
+
+color:#3e352e;
+
+opacity:0;
+transition:opacity 1.6s ease;
+}
+
+body.visible{opacity:1;}
+
+.velo-noche{
+position:fixed;
+inset:0;
+background:#151723;
+opacity:.35;
+pointer-events:none;
+transition:opacity 6s ease;
+z-index:-2;
+}
+
+.luz{
+position:fixed;
+left:50%;
+bottom:-220px;
+width:1000px;
+height:650px;
+transform:translateX(-50%) scale(.6);
+border-radius:50%;
+z-index:-1;
+
+background:radial-gradient(
+ellipse,
+rgba(255,240,210,.85) 0%,
+rgba(255,225,180,.55) 40%,
+rgba(255,205,150,.25) 65%,
+transparent 80%
+);
+
+filter:blur(65px);
+opacity:0;
+transition:
+opacity 6s ease,
+transform 8s cubic-bezier(.22,.7,.2,1);
+}
+
+body.amanecer .velo-noche{opacity:0;}
+body.amanecer .luz{
+opacity:1;
+transform:translateX(-50%) translateY(-120px) scale(1);
+}
+
+.project-title{
+font-size:40px;
+margin-top:130px;
+margin-bottom:24px;
+scroll-margin-top:120px;
+}
+
+h2{
+font-family:'IBM Plex Mono',monospace;
+font-size:12px;
+letter-spacing:.14em;
+margin-top:60px;
+margin-bottom:14px;
+color:#7a6a5f;
+}
+
+ul{margin-left:18px;}
+
+.divider{
+height:1px;
+background:rgba(0,0,0,.08);
+margin:140px 0;
+}
+
+.project-flex{
+display:grid;
+grid-template-columns:1fr 600px;
+gap:70px;
+align-items:start;
+margin:40px 0 50px 0;
+}
+
+.project-image{
+width:100%;
+border-radius:12px;
+border:1px solid rgba(0,0,0,.12);
+box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
+
+@media(max-width:1000px){
+.project-flex{grid-template-columns:1fr;}
+}
+
+.back{
+position:fixed;
+top:26px;
+left:30px;
+font-family:'IBM Plex Mono',monospace;
+font-size:11px;
+text-decoration:none;
+color:#8a7a6f;
+}
+
+.cta{
+text-align:center;
+margin:180px 0 100px 0;
+}
+
+.cta a{
+display:inline-block;
+margin-top:20px;
+font-family:'IBM Plex Mono',monospace;
+font-size:12px;
+text-decoration:none;
+padding:14px 22px;
+background:#3e352e;
+color:#fff;
+border-radius:8px;
+}
+
+</style><script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "Person",
+"name": "Zaida Rodríguez Alonso",
+"url": "https://zaidarodriguezalonso.com",
+"jobTitle": "UX Designer",
+"description": "UX designer exploring calm digital systems, cultural interfaces and experimental UX environments.",
+"sameAs": ["https://linkedin.com/in/zaidarodriguezalonso"],
+"knowsAbout": [
+"UX Design",
+"Interaction Design",
+"Digital Experience Design",
+"Cultural Interfaces",
+"Human-Centered Design"
+]
+}
+</script></head><body><div class="velo-noche"></div>
+<div class="luz"></div>
+<a class="back" href="index.html#constellation">back</a>
+
+<nav style="position:absolute;left:-9999px"><a href="#first">First Appointment UX case study</a>
+<a href="#waiting">Waiting System UX case study</a>
+<a href="#quiet">The Quiet Museum UX project</a>
+<a href="#room">Zaiduck's Room UX experiment</a>
+<a href="#farra">FARRA digital spatial UX project</a>
+
+</nav>
+
+<div id="projects"></div><script defer>
+const lang = localStorage.getItem("lang") || "en";
+
+const content = {
+
+en:`
+
+<!-- FIRST -->
+<div class="project">
+
+<div class="project-title" id="first">First Appointment</div>
+
+<div class="project-flex">
+
+<div>
+
+<p>A healthcare booking UX guiding users from symptoms to the correct specialist.</p>
+
+<h2>CONTEXT</h2>
+
+<p><strong>Problem:</strong> Users must compare doctors while stressed and cognitively overloaded.<br>
+<strong>Constraint:</strong> Limited time, high emotional pressure, fragmented medical information.<br>
+<strong>Goal:</strong> Reduce cognitive load and guide users toward the right specialist with clarity.</p>
+
+<h2>ROLE</h2>
+
+<p>UX research, service flow design, interaction design, prototyping.</p>
+
+<h2>TOOLS</h2>
+
+<p>Figma · UX flows · Service mapping</p>
+
+<h2>DESIGN REASONING</h2>
+
+<p>Early exploration showed that asking users to choose a specialist directly increased hesitation and anxiety. I decided to reverse the entry logic and start from symptoms instead. This shift reduced decision friction and created a guided, step-by-step experience aligned with user mental models.</p>
+
+<h2>SOLUTION</h2>
+
+<ul>
+<li>Symptom-first entry</li>
+<li>Guided specialist recommendation</li>
+<li>Reduced decision friction</li>
+</ul>
+
+<h2>IMPACT</h2>
+
+<p>The redesigned flow improves clarity at first interaction and supports users in high-stress contexts by simplifying the path to care.</p>
+
+</div>
+
+<img src="images/firstappointment-match.png" class="project-image heroimg">
+
+</div>
+</div>
+
+<!-- WAITING -->
+
+<div class="project">
+
+<div class="project-title" id="waiting">Waiting System</div>
+
+<div class="project-flex">
+
+<div>
+
+<p>Queue UX redesign improving perceived control during service waiting.</p>
+
+<h2>CONTEXT</h2>
+
+<p><strong>Problem:</strong> Users could not understand queue progression and felt uncertainty while waiting.<br>
+<strong>Constraint:</strong> Limited system transparency and delayed feedback.<br>
+<strong>Goal:</strong> Improve perceived control without altering backend logic.</p>
+
+<h2>ROLE</h2>
+
+<p>UX architecture, information design, system feedback modelling.</p>
+
+<h2>TOOLS</h2>
+
+<p>Figma · Flow modelling · UX states</p>
+
+<h2>DESIGN REASONING</h2>
+
+<p>Research indicated that uncertainty was more stressful than waiting time itself. Instead of focusing on countdown timers, I prioritized continuous visibility and system explanation to restore a sense of control.</p>
+
+<h2>SOLUTION</h2>
+
+<ul>
+<li>Continuous system visibility</li>
+<li>Progress-based feedback instead of time countdown</li>
+<li>Clear explanation of delays</li>
+</ul>
+
+<h2>IMPACT</h2>
+
+<p>The redesign shifts the experience from passive waiting to informed progression, improving emotional perception of time.</p>
+
+</div>
+
+<img src="images/waiting-main.png" class="project-image">
+
+</div>
+</div>
+
+<!-- QUIET -->
+
+<div class="project">
+
+<div class="project-title" id="quiet">The Quiet Museum</div>
+
+<div class="project-flex">
+
+<div>
+
+<p>A contemplative museum UX focused on perception over browsing.</p>
+
+<h2>CONTEXT</h2>
+
+<p><strong>Problem:</strong> Museum apps often overwhelm users with dense collections.<br>
+<strong>Constraint:</strong> Digital environments favor browsing over contemplation.<br>
+<strong>Goal:</strong> Create a perception-first experience centered on one artwork at a time.</p>
+
+<h2>ROLE</h2>
+
+<p>Concept design, interaction modelling, emotional pacing design.</p>
+
+<h2>TOOLS</h2>
+
+<p>Figma · Narrative UX · Interaction prototyping</p>
+
+<h2>DESIGN REASONING</h2>
+
+<p>I intentionally removed collection-heavy interfaces and reduced choice overload. By slowing navigation and focusing on a single artwork, the experience invites observation rather than consumption.</p>
+
+<h2>SOLUTION</h2>
+
+<ul>
+<li>Single artwork focus</li>
+<li>Slow navigation pacing</li>
+<li>Observation-first interaction</li>
+</ul>
+
+<h2>IMPACT</h2>
+
+<p>The system reframes digital museum interaction as a contemplative experience rather than a catalog exploration.</p>
+
+</div>
+
+<img src="images/museum.png" class="project-image heroimg">
+
+</div>
+</div>
+
+<!-- ZAIDUCK -->
+
+<div class="project">
+
+<div class="project-title" id="room">Zaiduck’s Room</div>
+
+<div class="project-flex">
+
+<div>
+
+<p>An emotionally responsive UX system supporting regulation before decisions.</p>
+
+<h2>CONTEXT</h2>
+
+<p><strong>Problem:</strong> Users often make digital decisions while emotionally dysregulated.<br>
+<strong>Goal:</strong> Create a system that supports emotional regulation before action.</p>
+
+<h2>ROLE</h2>
+
+<p>End-to-end UX concept, architecture, interaction design.</p>
+
+<h2>TOOLS</h2>
+
+<p>HTML · CSS · Interaction design · UX concept system</p>
+
+<h2>DESIGN REASONING</h2>
+
+<p>The structure follows emotional pacing rather than traditional navigation logic. Each screen represents a psychological state designed to reduce cognitive noise and restore agency before decision-making.</p>
+
+<h2>FOCUS</h2>
+
+<ul>
+<li>Emotional regulation first</li>
+<li>Perceptual navigation</li>
+<li>Minimal agency restoration</li>
+</ul>
+
+<h2>IMPACT</h2>
+
+<p>Zaiduck’s Room demonstrates how UX systems can function as emotional scaffolding rather than purely functional tools.</p>
+
+<p><a href="https://zaidarodriguezalonso.com/zaiducksroom" target="_blank">Visit live project →</a></p>
+
+</div>
+
+<img src="images/zaiduck.png" class="project-image">
+
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WITH -->
+
+<div class="project">
+
+<div class="project-title">WITH</div>
+
+<p>A behavioral interruption layer designed to restore conscious mobile use.</p>
+
+<h2>CONCEPT</h2>
+
+<p>WITH introduces intentional psychological friction before habitual actions. Instead of restricting behavior, it creates a reflective pause that supports awareness and choice.</p>
+
+<h2>FOCUS</h2>
+
+<ul>
+<li>Interrupt automatic scrolling patterns</li>
+<li>Restore conscious decision-making</li>
+<li>Design friction as regulation, not punishment</li>
+</ul>
+
+<p><em>Currently in development.</em></p>
+
+</div>
+
+<div class="divider"></div>
+
+<!-- FARRA -->
+
+<div class="project">
+
+<div class="project-title" id="farra">FARRA!</div>
+
+<p>An experimental digital spatial system exploring invisible presence.</p>
+
+<h2>CONCEPT</h2>
+
+<p>FARRA! investigates how digital environments can evoke shared presence without explicit interaction. It blends spatial perception, symbolic interaction and experiential UX.</p>
+
+<h2>FOCUS</h2>
+
+<ul>
+<li>Invisible social presence</li>
+<li>Spatial digital architecture</li>
+<li>Experience before interface</li>
+</ul>
+
+<p><em>Currently in development.</em></p>
+
+</div>
+
+<div class="cta">
+
+<h2>Interested in working together?</h2>
+<p>I am open to junior UX / product roles in Europe.</p>
+
+<a href="index.html#about">Go to About →</a>
+
+</div>
+
+`,
+
+es:`
+
+<!-- FIRST -->
+<div class="project">
+<div class="project-title" id="first">First Appointment</div>
+
+<div class="project-flex">
+<div>
+
+<p><strong>Claridad del problema:</strong> Reservar una cita médica suele obligar al usuario a comparar especialistas en un momento de estrés, incertidumbre y sobrecarga cognitiva.</p>
+
+<h2>CONTEXTO</h2>
+<p>El flujo original asumía que el usuario sabía qué especialista necesitaba. Las entrevistas revelaron dudas frecuentes, retrocesos en la navegación y ansiedad durante la toma de decisión.</p>
+
+<h2>ROL</h2>
+<p>Lideré la síntesis de investigación UX, rediseño del flujo de servicio, definición de lógica de interacción y prototipado de alta fidelidad.</p>
+
+<h2>DECISIÓN DE DISEÑO</h2>
+<p>Invertí la lógica de entrada. En lugar de comenzar por “Elegir especialista”, el proceso inicia desde síntomas. Esto transforma la experiencia de una comparación exigente a un recorrido guiado.</p>
+
+<h2>CÓMO LOS INSIGHTS MOLDEARON EL RESULTADO</h2>
+<p>Las entrevistas mostraron que el estado emocional influía en errores de decisión. Reduje el número de opciones visibles por paso, introduje progresión gradual y estructuré la interacción como un acompañamiento en lugar de un directorio abierto.</p>
+
+<h2>IMPACTO</h2>
+<p>El resultado es una primera interacción más calmada, menor vacilación y una progresión clara hacia la atención médica.</p>
+
+</div>
+
+<img src="images/firstappointment-match.png" class="project-image heroimg">
+
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WAITING -->
+<div class="project">
+<div class="project-title" id="waiting">Waiting System</div>
+
+<div class="project-flex">
+<div>
+
+<p><strong>Desafío central:</strong> La percepción del tiempo de espera generaba más estrés que la espera real.</p>
+
+<h2>CONTEXTO</h2>
+<p>Los usuarios expresaban frustración porque el sistema no explicaba cómo avanzaba la cola. Existían restricciones técnicas que impedían cambios estructurales profundos en el backend.</p>
+
+<h2>ROL</h2>
+<p>Rediseño de arquitectura de información y modelado de estados del sistema.</p>
+
+<h2>DECISIÓN DE DISEÑO</h2>
+<p>En lugar de centrar la solución en contadores regresivos, introduje visibilidad progresiva del estado y explicaciones contextuales. El objetivo no era acortar la espera, sino hacerla comprensible.</p>
+
+<h2>CÓMO LOS INSIGHTS MOLDEARON EL RESULTADO</h2>
+<p>El análisis conductual mostró que la percepción de control reduce la ansiedad. Por ello, la transparencia del sistema se convirtió en el eje del rediseño.</p>
+
+<h2>IMPACTO</h2>
+<p>La experiencia pasó de una espera pasiva a una progresión informada y emocionalmente más estable.</p>
+
+</div>
+
+<img src="images/waiting-main.png" class="project-image">
+
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- QUIET -->
+<div class="project">
+<div class="project-title" id="quiet">The Quiet Museum</div>
+
+<p><strong>Pregunta de partida:</strong> ¿Qué ocurre si una experiencia museística digital elimina la presión de navegar y centra la percepción?</p>
+
+<h2>CONTEXTO</h2>
+<p>La mayoría de aplicaciones de museo replican la lógica de catálogo, favoreciendo el escaneo rápido en lugar de la observación profunda.</p>
+
+<h2>DECISIÓN DE DISEÑO</h2>
+<p>Eliminé estructuras centradas en colección y diseñé la experiencia alrededor de una única obra por pantalla. La navegación se ralentiza y se reduce a lo esencial.</p>
+
+<h2>CÓMO LOS INSIGHTS MOLDEARON EL RESULTADO</h2>
+<p>El estudio de patrones de atención demostró que la abundancia disminuye la profundidad perceptiva. Al limitar la elección, aumenté la presencia.</p>
+
+<h2>IMPACTO</h2>
+<p>La interacción digital se transforma en una experiencia contemplativa en lugar de consumista.</p>
+
+<img src="images/museum.png" class="project-image heroimg">
+
+</div>
+
+<div class="divider"></div>
+
+<!-- ZAIDUCK -->
+<div class="project">
+<div class="project-title" id="room">Zaiduck’s Room</div>
+
+<p><strong>Exploración central:</strong> ¿Puede un sistema UX funcionar como andamiaje emocional?</p>
+
+<h2>CONTEXTO</h2>
+<p>Muchas decisiones digitales se toman en estados de desregulación emocional. El UX tradicional asume usuarios racionales y estables.</p>
+
+<h2>DECISIÓN DE DISEÑO</h2>
+<p>La arquitectura sigue un ritmo emocional en lugar de una lógica de navegación convencional. Cada pantalla representa un estado psicológico.</p>
+
+<h2>CÓMO LOS INSIGHTS MOLDEARON EL RESULTADO</h2>
+<p>Apliqué principios de pacing, reducción de estímulos y transiciones simbólicas para restaurar agencia antes de la acción.</p>
+
+<h2>IMPACTO</h2>
+<p>El proyecto demuestra que el UX puede actuar como capa de regulación, no solo como capa funcional.</p>
+
+<p><a href="https://zaidarodriguezalonso.com/zaiducksroom" target="_blank">Visitar proyecto →</a></p>
+
+<img src="images/zaiduck.png" class="project-image">
+
+</div>
+
+<div class="divider"></div>
+
+<!-- WITH -->
+<div class="project">
+<div class="project-title">WITH</div>
+
+<p>Capa de interrupción conductual que introduce fricción consciente antes de acciones automáticas.</p>
+
+<p>En lugar de restringir el uso, el sistema genera pausas reflexivas. El principio de diseño es regulación, no castigo.</p>
+
+<p><em>Actualmente en desarrollo.</em></p>
+</div>
+
+<div class="divider"></div>
+
+<!-- FARRA -->
+<div class="project">
+<div class="project-title" id="farra">FARRA!</div>
+
+<p>Sistema digital espacial experimental que explora la presencia social invisible.</p>
+
+<p>Investiga cómo puede existir percepción compartida sin interacción explícita.</p>
+
+<p><em>Actualmente en desarrollo.</em></p>
+</div>
+
+<div class="cta">
+<h2>¿Te interesa trabajar conmigo?</h2>
+<p>Disponible para puestos junior UX / product en Europa.</p>
+<a href="index.html#about">Ir a About →</a>
+</div>
+
+`
+
+};
+
+document.getElementById("projects").innerHTML = content[lang];
+
+setTimeout(()=>document.body.classList.add("visible"),120);
+setTimeout(()=>document.body.classList.add("amanecer"),1000);
+
+</script></body>
+</html>
