@@ -17,33 +17,58 @@ position:relative;
 z-index:1;
 }
 
-/* SKY */
+/* ---------- SKY ---------- */
 
 #sky{
 position:fixed;
-inset:0;
-z-index:0;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+overflow:hidden;
 pointer-events:none;
+opacity:.9;
 }
+
+/* STAR BASE */
 
 .sky-star{
 position:absolute;
 border-radius:50%;
 background:white;
-transition:transform .6s ease;
 }
 
-#sky::after{
-content:"";
-position:absolute;
-inset:0;
-background:rgba(0,0,0,0);
-transition:background 1.2s ease;
-pointer-events:none;
+/* DEPTH LAYERS */
+
+.sky-star.far{
+opacity:.35;
 }
 
-.constellation-active #sky::after{
-background:rgba(0,0,0,.35);
+.sky-star.mid{
+opacity:.6;
+}
+
+.sky-star.near{
+opacity:.9;
+
+box-shadow:
+0 0 6px rgba(255,255,255,.8),
+0 0 12px rgba(210,200,255,.6);
+}
+
+/* TWINKLE */
+
+.sky-star{
+animation:starTwinkle 6s infinite ease-in-out;
+}
+
+@keyframes starTwinkle{
+
+0%{opacity:.6}
+50%{opacity:1}
+100%{opacity:.6}
+
 }
 
 /* HERO */
@@ -140,14 +165,19 @@ position:relative;
 position:absolute;
 top:50%;
 left:63%;
-width:14px;
-height:14px;
+
+width:10px;
+height:10px;
+
 background:white;
 border-radius:50%;
-cursor:pointer;
+
 box-shadow:
-0 0 40px rgba(255,255,255,.95),
-0 0 120px rgba(200,200,255,.75);
+0 0 12px rgba(255,255,255,1),
+0 0 30px rgba(210,200,255,.9),
+0 0 40px rgba(180,160,255,.6);
+
+cursor:pointer;
 }
 
 /* ORBIT STARS */
@@ -161,11 +191,13 @@ background:white;
 opacity:0;
 cursor:pointer;
 transform:scale(.2);
+
 transition:
 opacity 1.2s ease,
 transform .2s ease,
 box-shadow .4s ease;
-animation:starBreath 6s ease-in-out infinite;
+
+animation:starPulse 6s ease-in-out infinite;
 }
 
 .orbit-star.visible{
@@ -173,7 +205,7 @@ opacity:.9;
 transform:scale(1);
 }
 
-@keyframes starBreath{
+@keyframes starPulse{
 0%{transform:scale(1);opacity:.7;}
 50%{transform:scale(1.25);opacity:1;}
 100%{transform:scale(1);opacity:.7;}
@@ -208,16 +240,17 @@ transform:scale(1.8);
 
 .star-label{
 position:absolute;
-font-size:10px;
-letter-spacing:.12em;
-opacity:.7;
-cursor:pointer;
-transition:opacity .3s ease;
-transform:translate(-50%, -120%);
+font-size:12px;
+letter-spacing:.15em;
+color:rgba(255,255,255,.85);
+opacity:1;
+transition:opacity .3s;
+white-space:nowrap;
+pointer-events:none;
 }
 
-.star-label:hover{
-opacity:1;
+.orbit-star.visible:hover + .star-label{
+opacity:.25;
 }
 
 .mini-label{
@@ -261,6 +294,7 @@ background:rgba(255,255,255,.15);
 transform-origin:0 0;
 opacity:0;
 width:0;
+
 transition:
 opacity .4s ease,
 background .4s ease,

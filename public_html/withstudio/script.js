@@ -1,24 +1,40 @@
-/* ---------- SKY ---------- */
+/* =========================================================
+WITH STUDIO — MASTER SCRIPT
+========================================================= */
+
+
+/* ---------- SKY GENERATOR ---------- */
 
 const sky = document.getElementById("sky");
 
-for (let i = 0; i < 110; i++) {
+if(sky){
+
+for(let i=0;i<110;i++){
 
 let s = document.createElement("div");
 
-s.className = "sky-star";
-
 let d = Math.random();
 
-s.style.left = Math.random() * 100 + "%";
-s.style.top = Math.random() * 100 + "%";
-s.style.animationDelay = Math.random()*6 + "s";
+let layer;
+
+if(d > 0.85){
+layer = "sky-star near";
+}else if(d > 0.6){
+layer = "sky-star mid";
+}else{
+layer = "sky-star far";
+}
+
+s.className = layer;
+
+s.style.left = Math.random()*100 + "%";
+s.style.top = Math.random()*100 + "%";
 
 let size;
 
-if(d > 0.85){
+if(d > 0.92){
 size = 3;
-}else if(d > 0.6){
+}else if(d > 0.7){
 size = 2;
 }else{
 size = 1;
@@ -27,63 +43,89 @@ size = 1;
 s.style.width = size + "px";
 s.style.height = size + "px";
 
-s.style.opacity = d * 0.8 + 0.2;
+/* depth */
 
-s.dataset.depth = Math.random();
+let depth;
+
+if(layer.includes("near")){
+depth = 0.25;
+}else if(layer.includes("mid")){
+depth = 0.12;
+}else{
+depth = 0.04;
+}
+
+s.dataset.depth = depth;
 
 sky.appendChild(s);
 
 }
 
-
-/* ---------- CENTER STAR BREATH ---------- */
-
-const center = document.querySelector(".center");
-
-if(center){
-
-let scale = 1;
-let direction = 1;
-let glow = 0;
-
-function pulse(){
-
-scale += direction * 0.001;
-glow += 0.015;
-
-const light = 0.8 + Math.sin(glow) * 0.2;
-
-center.style.textShadow = `
-0 0 6px rgba(255,255,255,${light}),
-0 0 18px rgba(235,230,255,${light}),
-0 0 40px rgba(210,200,255,${light})
-`;
-
-if(scale > 1.1 || scale < 0.9){
-direction *= -1;
 }
 
-center.style.transform =
-`translate(-50%,-50%) scale(${scale})`;
+/* ---------- SKY CONSTELLATIONS ---------- */
 
-requestAnimationFrame(pulse);
+const skyLines = document.getElementById("sky-lines");
+
+function createSkyConstellations(){
+
+if(!skyLines) return;
+
+const stars = document.querySelectorAll(".sky-star");
+
+stars.forEach(star=>{
+
+if(Math.random()<0.03){
+
+const rect1 = star.getBoundingClientRect();
+
+const x1 = rect1.left + rect1.width/2;
+const y1 = rect1.top + rect1.height/2;
+
+const other = stars[Math.floor(Math.random()*stars.length)];
+
+const rect2 = other.getBoundingClientRect();
+
+const x2 = rect2.left + rect2.width/2;
+const y2 = rect2.top + rect2.height/2;
+
+const dist = Math.hypot(x2-x1,y2-y1);
+
+if(dist < 250){
+
+const line = document.createElementNS(
+"http://www.w3.org/2000/svg","line"
+);
+
+line.setAttribute("x1",x1);
+line.setAttribute("y1",y1);
+line.setAttribute("x2",x2);
+line.setAttribute("y2",y2);
+
+skyLines.appendChild(line);
+
+setTimeout(()=>line.remove(),8000);
 
 }
 
-pulse();
+}
+
+});
 
 }
+
+setInterval(createSkyConstellations,6000);
 
 
 /* ---------- SKY PARALLAX ---------- */
 
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
+let mouseX = window.innerWidth/2;
+let mouseY = window.innerHeight/2;
 
 let smoothX = mouseX;
 let smoothY = mouseY;
 
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("mousemove",(e)=>{
 
 mouseX = e.clientX;
 mouseY = e.clientY;
@@ -92,17 +134,15 @@ mouseY = e.clientY;
 
 function moveSky(){
 
-smoothX += (mouseX - smoothX) * 0.03;
-smoothY += (mouseY - smoothY) * 0.03;
+smoothX += (mouseX-smoothX)*0.03;
+smoothY += (mouseY-smoothY)*0.03;
 
-const stars = document.querySelectorAll(".sky-star");
-
-stars.forEach((star)=>{
+document.querySelectorAll(".sky-star").forEach(star=>{
 
 const depth = star.dataset.depth;
 
-const moveX = (smoothX - window.innerWidth/2) * depth * 0.01;
-const moveY = (smoothY - window.innerHeight/2) * depth * 0.01;
+const moveX = (smoothX-window.innerWidth/2)*depth*0.08;
+const moveY = (smoothY-window.innerHeight/2)*depth*0.01;
 
 star.style.transform =
 `translate(${moveX}px, ${moveY}px)`;
@@ -115,8 +155,9 @@ requestAnimationFrame(moveSky);
 
 moveSky();
 
-
-/* ---------- CONSTELLATION ---------- */
+/* =========================================================
+HOME CONSTELLATION
+========================================================= */
 
 const orbitStars = document.querySelectorAll(".star");
 
@@ -131,54 +172,13 @@ about: document.getElementById("l5")
 };
 
 
-/* ---------- MICRO GRAVITY ---------- */
+/* ---------- MARK VISITED ---------- */
 
-function applyGravity(){
-
-orbitStars.forEach((star)=>{
-
-const rect = star.getBoundingClientRect();
-
-const sx = rect.left + rect.width/2;
-const sy = rect.top + rect.height/2;
-
-const dx = mouseX - sx;
-const dy = mouseY - sy;
-
-const dist = Math.sqrt(dx*dx + dy*dy);
-
-if(dist < 180){
-
-const force = (180 - dist) / 180;
-
-const offsetX = dx * force * 0.05;
-const offsetY = dy * force * 0.05;
-
-star.style.transform =
-`translate(-50%,-50%) translate(${offsetX}px, ${offsetY}px)`;
-
-}else{
-
-star.style.transform = "translate(-50%,-50%)";
-
-}
-
-});
-
-requestAnimationFrame(applyGravity);
-
-}
-
-applyGravity();
-
-
-/* ---------- VISITED STARS ---------- */
-
-orbitStars.forEach(star => {
+orbitStars.forEach(star=>{
 
 const page = star.dataset.page;
 
-if(localStorage.getItem("visited-"+page)){
+if(sessionStorage.getItem("visited-"+page)){
 
 star.classList.add("visited");
 
@@ -188,24 +188,30 @@ lines[page].classList.add("line-visible");
 
 }
 
-star.addEventListener("click", ()=>{
-
-localStorage.setItem("visited-"+page,true);
-
 });
 
-});
-
-
-/* ---------- REFRESH WHEN RETURN ---------- */
-
-window.addEventListener("pageshow", () => {
-
-orbitStars.forEach(star => {
+orbitStars.forEach(star=>{
 
 const page = star.dataset.page;
 
-if(localStorage.getItem("visited-"+page)){
+star.addEventListener("click",()=>{
+
+sessionStorage.setItem("visited-"+page,"true");
+
+});
+
+});
+
+
+/* ---------- RETURN VISIT ---------- */
+
+window.addEventListener("pageshow",()=>{
+
+orbitStars.forEach(star=>{
+
+const page = star.dataset.page;
+
+if(sessionStorage.getItem("visited-"+page)){
 
 star.classList.add("visited");
 
@@ -224,22 +230,25 @@ lines[page].classList.add("line-visible");
 
 function checkConstellation(){
 
-let visitedCount = 0;
+if(!orbitStars.length) return;
+
+let visited = 0;
 
 orbitStars.forEach(star=>{
 
 const page = star.dataset.page;
 
-if(localStorage.getItem("visited-"+page)){
-visitedCount++;
+if(sessionStorage.getItem("visited-"+page)){
+visited++;
 }
 
 });
 
-if(visitedCount === orbitStars.length){
+if(visited === orbitStars.length){
 
-document.querySelector(".constellation")
-.classList.add("complete");
+const c = document.querySelector(".constellation");
+
+if(c) c.classList.add("complete");
 
 }
 
@@ -248,15 +257,11 @@ document.querySelector(".constellation")
 checkConstellation();
 
 
-/* ---------- LIVE CONNECTIONS ---------- */
+/* =========================================================
+MICRO GRAVITY
+========================================================= */
 
-const dynamicSVG = document.querySelector(".dynamic-lines");
-
-function updateDynamicLines(){
-
-if(!dynamicSVG) return;
-
-dynamicSVG.innerHTML = "";
+function applyGravity(){
 
 orbitStars.forEach(star=>{
 
@@ -270,11 +275,62 @@ const dy = mouseY - sy;
 
 const dist = Math.sqrt(dx*dx + dy*dy);
 
-if(dist < 120){
+if(dist < 180){
+
+const force = (180-dist)/180;
+
+
+const offsetX = dx*force*0.08;
+const offsetY = dy*force*0.08;
+
+
+star.style.transform =
+`translate(-50%,-50%) translate(${offsetX}px,${offsetY}px)`;
+
+}else{
+
+star.style.transform="translate(-50%,-50%)";
+
+}
+
+});
+
+requestAnimationFrame(applyGravity);
+
+}
+
+applyGravity();
+
+
+/* =========================================================
+DYNAMIC STAR CONNECTIONS
+========================================================= */
+
+const dynamicSVG = document.querySelector(".dynamic-lines");
+
+function updateDynamicLines(){
+
+if(!dynamicSVG) return;
+
+dynamicSVG.innerHTML="";
+
+orbitStars.forEach(star=>{
+
+const rect = star.getBoundingClientRect();
+
+const sx = rect.left + rect.width/2;
+const sy = rect.top + rect.height/2;
+
+const dx = mouseX - sx;
+const dy = mouseY - sy;
+
+const dist = Math.sqrt(dx*dx + dy*dy);
+
+if(dist<120){
 
 orbitStars.forEach(other=>{
 
-if(other === star) return;
+if(other===star) return;
 
 const r = other.getBoundingClientRect();
 
@@ -283,11 +339,10 @@ const oy = r.top + r.height/2;
 
 const d2 = Math.sqrt((ox-sx)**2 + (oy-sy)**2);
 
-if(d2 < 200){
+if(d2<200){
 
 const line = document.createElementNS(
-"http://www.w3.org/2000/svg",
-"line"
+"http://www.w3.org/2000/svg","line"
 );
 
 line.setAttribute("x1",sx);
@@ -295,7 +350,7 @@ line.setAttribute("y1",sy);
 line.setAttribute("x2",ox);
 line.setAttribute("y2",oy);
 
-line.style.opacity = .25;
+line.style.opacity=.25;
 
 dynamicSVG.appendChild(line);
 
@@ -314,31 +369,9 @@ requestAnimationFrame(updateDynamicLines);
 updateDynamicLines();
 
 
-/* ---------- STAR WAVE ---------- */
-
-orbitStars.forEach(star=>{
-
-star.addEventListener("mouseenter",()=>{
-
-const rect = star.getBoundingClientRect();
-
-const wave = document.createElement("div");
-
-wave.className = "star-wave";
-
-wave.style.left = rect.left + rect.width/2 + "px";
-wave.style.top = rect.top + rect.height/2 + "px";
-
-document.body.appendChild(wave);
-
-setTimeout(()=>wave.remove(),1600);
-
-});
-
-});
-
-
-/* ---------- COSMIC PORTAL ---------- */
+/* =========================================================
+CENTER STAR PORTAL
+========================================================= */
 
 const portal = document.querySelector(".center");
 
@@ -351,7 +384,9 @@ e.preventDefault();
 document.body.classList.add("cosmic-collapse");
 
 setTimeout(()=>{
-window.location.href = "about.html";
+
+window.location.href="about.html";
+
 },800);
 
 });
@@ -359,39 +394,13 @@ window.location.href = "about.html";
 }
 
 
-/* ---------- TITLE STARLIGHT ---------- */
-
-const title = document.querySelector("h1");
-
-if(title){
-
-document.addEventListener("mousemove",(e)=>{
-
-const rect = title.getBoundingClientRect();
-
-const dx = e.clientX - (rect.left + rect.width/2);
-const dy = e.clientY - (rect.top + rect.height/2);
-
-const dist = Math.sqrt(dx*dx + dy*dy);
-
-const intensity = Math.max(0, 120 - dist) / 120;
-
-const glow = 10 + intensity * 40;
-
-title.style.textShadow = `
-0 0 ${glow*0.4}px rgba(255,255,255,.8),
-0 0 ${glow}px rgba(210,200,255,.6),
-0 0 ${glow*2}px rgba(170,150,255,.4)
-`;
-
-});
-
-}
-
-
-/* ---------- SCROLL REVEAL ---------- */
+/* =========================================================
+SCROLL REVEAL
+========================================================= */
 
 const reveals = document.querySelectorAll(".reveal");
+
+if(reveals.length){
 
 const observer = new IntersectionObserver(entries=>{
 
@@ -406,3 +415,60 @@ entry.target.classList.add("visible");
 },{threshold:0.2});
 
 reveals.forEach(el=>observer.observe(el));
+
+}
+
+
+/* =========================================================
+PROJECT CONSTELLATION COMPLETE
+========================================================= */
+
+function checkProjectsComplete(){
+
+const quiet = localStorage.getItem("visited_quietmuseum");
+const farra = localStorage.getItem("visited_farra");
+const withside = localStorage.getItem("visited_withside");
+const zaiduck = localStorage.getItem("visited_zaiducksroom");
+
+if(
+quiet==="true" &&
+farra==="true" &&
+withside==="true" &&
+zaiduck==="true"
+){
+
+document.body.classList.add("constellation-complete");
+
+const msg = document.getElementById("constellation-message");
+
+if(msg){
+msg.style.opacity = ".8";
+}
+
+}
+
+}
+
+checkProjectsComplete();
+
+/* ---------- PROJECT STARS VISITED ---------- */
+
+const projectStars = document.querySelectorAll(".project-star");
+
+projectStars.forEach(star => {
+
+const href = star.getAttribute("href");
+
+if(localStorage.getItem("visited_"+href)){
+
+star.classList.add("visited");
+
+}
+
+star.addEventListener("click", () => {
+
+localStorage.setItem("visited_"+href, "true");
+
+});
+
+});

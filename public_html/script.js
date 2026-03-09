@@ -1,30 +1,103 @@
-/* ---------- SKY BACKGROUND ---------- */
+/* ---------- SKY GENERATOR ---------- */
 
 const sky = document.getElementById("sky");
 
-for (let i = 0; i < 170; i++) {
+if(sky){
+
+for(let i=0;i<110;i++){
 
 let s = document.createElement("div");
-s.className = "sky-star";
 
 let d = Math.random();
+let layer;
 
-s.style.left = Math.random() * 100 + "%";
-s.style.top = Math.random() * 100 + "%";
+if(d > 0.85){
+layer = "sky-star near";
+}else if(d > 0.6){
+layer = "sky-star mid";
+}else{
+layer = "sky-star far";
+}
 
-let size = d * 2 + 0.6;
+s.className = layer;
+
+s.style.left = Math.random()*100 + "%";
+s.style.top = Math.random()*100 + "%";
+
+let size;
+
+if(d > 0.92){
+size = 3;
+}else if(d > 0.7){
+size = 2;
+}else{
+size = 1;
+}
 
 s.style.width = size + "px";
 s.style.height = size + "px";
-s.style.opacity = d * 0.8 + .2;
+
+/* depth */
+
+let depth;
+
+if(layer.includes("near")){
+depth = 0.25;
+}else if(layer.includes("mid")){
+depth = 0.12;
+}else{
+depth = 0.04;
+}
+
+s.dataset.depth = depth;
 
 sky.appendChild(s);
+
+}
 
 }
 
 setTimeout(()=>{
 document.body.classList.add("ready")
 },300);
+
+
+
+/* ---------- SKY PARALLAX ---------- */
+
+let mouseX = window.innerWidth/2;
+let mouseY = window.innerHeight/2;
+
+let smoothX = mouseX;
+let smoothY = mouseY;
+
+document.addEventListener("mousemove",(e)=>{
+mouseX = e.clientX;
+mouseY = e.clientY;
+});
+
+function moveSky(){
+
+smoothX += (mouseX-smoothX)*0.03;
+smoothY += (mouseY-smoothY)*0.03;
+
+document.querySelectorAll(".sky-star").forEach(star=>{
+
+const depth = star.dataset.depth;
+
+const moveX = (smoothX-window.innerWidth/2)*depth*0.08;
+const moveY = (smoothY-window.innerHeight/2)*depth*0.01;
+
+star.style.transform =
+`translate(${moveX}px, ${moveY}px)`;
+
+});
+
+requestAnimationFrame(moveSky);
+
+}
+
+moveSky();
 
 
 
@@ -58,12 +131,12 @@ location.reload();
 const txt = {
 
 en:{
-headline:"Exploring how humans experience digital spaces.",
+headline:"UX designer exploring digital systems, human interaction and cultural experiences.",
 role:"UX / Product Designer",
-availability:"Designing calm digital systems, cultural interfaces and experimental UX environments.",
+availability:"Designing calm digital systems, interaction experiences and experimental UX environments.",
 scroll1:"view UX projects ↓",
 scroll2:"about the studio ↓",
-constellationNote:"UX projects orbiting a practice of calm digital systems.",
+constellationNote:"Selected UX projects exploring digital systems, interaction and human experience.",
 
 aboutTitle:"About",
 
@@ -75,12 +148,12 @@ about3:"Through projects like The Quiet Museum, FARRA and Zaiduck’s Room I inv
 },
 
 es:{
-headline:"Explorando cómo las personas experimentan los espacios digitales.",
+headline:"Diseñadora UX explorando sistemas digitales, interacción humana y experiencias culturales.",
 role:"Diseñadora UX / Product Designer",
-availability:"Diseñando sistemas digitales calmados, interfaces culturales y experiencias UX experimentales.",
+availability:"Diseñando sistemas digitales calmados, experiencias de interacción y entornos UX experimentales.",
 scroll1:"ver proyectos UX ↓",
 scroll2:"sobre el estudio ↓",
-constellationNote:"Proyectos UX orbitando una práctica de sistemas digitales calmados.",
+constellationNote:"Proyectos UX que exploran sistemas digitales, interacción y experiencia humana.",
 
 aboutTitle:"Sobre el estudio",
 
@@ -140,42 +213,22 @@ const labelQuiet=document.getElementById("label-quiet");
 const labelFarra=document.getElementById("label-farra");
 const labelRoom=document.getElementById("label-room");
 const labelWith=document.getElementById("label-with");
+const labelWithNode=document.getElementById("label-withnode");
 
 const labelFirst=document.getElementById("label-first");
 const labelWaiting=document.getElementById("label-waiting");
-const labelWithNode=document.getElementById("label-withnode");
 
 
 
 /* ---------- STAR NAVIGATION ---------- */
 
-star.onclick=()=>{
-window.location.href="projects.html#projects";
-};
-
-quiet.onclick=()=>{
-window.location.href="projects.html#quiet";
-};
-
-farra.onclick=()=>{
-window.location.href="projects.html#farra";
-};
-
-room.onclick=()=>{
-window.location.href="projects.html#room";
-};
-
-withStar.onclick=()=>{
-window.location.href="projects.html#with";
-};
-
-first.onclick=()=>{
-window.location.href="projects.html#first";
-};
-
-waiting.onclick=()=>{
-window.location.href="projects.html#waiting";
-};
+star.onclick=()=>window.location.href="projects.html#projects";
+quiet.onclick=()=>window.location.href="projects.html#quiet";
+farra.onclick=()=>window.location.href="projects.html#farra";
+room.onclick=()=>window.location.href="projects.html#room";
+withStar.onclick=()=>window.location.href="projects.html#with";
+first.onclick=()=>window.location.href="projects.html#first";
+waiting.onclick=()=>window.location.href="projects.html#waiting";
 
 
 
@@ -185,7 +238,6 @@ labelQuiet.onclick=quiet.onclick;
 labelFarra.onclick=farra.onclick;
 labelRoom.onclick=room.onclick;
 labelWith.onclick=withStar.onclick;
-
 labelFirst.onclick=first.onclick;
 labelWaiting.onclick=waiting.onclick;
 
@@ -201,7 +253,7 @@ const r=star.getBoundingClientRect();
 const c=document.getElementById("constellation").getBoundingClientRect();
 
 label.style.left=(r.left-c.left-label.offsetWidth/2)+"px";
-label.style.top=(r.top-c.top-14)+"px";
+label.style.top=(r.top-c.top-20)+"px";
 
 }
 
@@ -255,60 +307,27 @@ connectStars("line1","star","quiet");
 connectStars("line2","star","farra");
 connectStars("line3","star","room");
 connectStars("line4","star","with");
-
 connectStars("line5","star","first");
 connectStars("line6","star","waiting");
 
-}
-
-
-
-/* ---------- CURSOR MICRO GRAVITY ---------- */
-
-let mouseX = window.innerWidth/2;
-let mouseY = window.innerHeight/2;
-
-document.addEventListener("mousemove",(e)=>{
-mouseX=e.clientX;
-mouseY=e.clientY;
-});
-
-function applyGravity(star,x,y){
-
-const rect=star.getBoundingClientRect();
-
-const sx=rect.left+rect.width/2;
-const sy=rect.top+rect.height/2;
-
-const dx=mouseX-sx;
-const dy=mouseY-sy;
-
-const dist=Math.sqrt(dx*dx+dy*dy);
-
-if(dist<200){
-
-const force=(200-dist)/200;
-
-x+=dx*force*0.03;
-y+=dy*force*0.03;
 
 }
 
-return{x,y};
 
-}
+
+
 
 
 
 /* ---------- ORBIT SYSTEM ---------- */
 
 const orbitStars = [
-{el: quiet, r: 12, speed:1},
-{el: farra, r: 15, speed:1},
-{el: room, r: 18, speed:1},
-{el: withStar, r: 16, speed:0.7},
-{el: first, r: 14, speed:1},
-{el: waiting, r: 16, speed:1}
+{el: quiet, r: 20, speed:1},
+{el: farra, r: 24, speed:1},
+{el: room, r: 22, speed:1},
+{el: withStar, r: 18, speed:0.7},
+{el: first, r: 26, speed:1},
+{el: waiting, r: 23, speed:1}
 ];
 
 let orbitAngle=0;
@@ -324,10 +343,6 @@ const angle = orbitAngle * s.speed + i;
 let x = Math.cos(angle) * s.r;
 let y = Math.sin(angle) * s.r;
 
-const g = applyGravity(s.el,x,y);
-
-x = g.x;
-y = g.y;
 
 s.el.style.transform=`translate(${x}px, ${y}px)`;
 
@@ -347,13 +362,22 @@ orbitMotion();
 /* ---------- MINI STARS APPEAR ---------- */
 
 setTimeout(()=>{
+quiet.classList.add("visible");
+farra.classList.add("visible");
+room.classList.add("visible");
+withStar.classList.add("visible");
 
-first.style.opacity=1;
-waiting.style.opacity=1;
-withNode.style.opacity=.7;
+first.classList.add("visible");
+waiting.classList.add("visible");
 
-},1200);
+/* activar labels principales */
 
+labelQuiet.classList.add("visible");
+labelFarra.classList.add("visible");
+labelRoom.classList.add("visible");
+labelWith.classList.add("visible");
+
+},800);
 
 
 /* ---------- WITH MINI ORBIT ---------- */

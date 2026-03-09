@@ -4,7 +4,7 @@ margin:0;
 background:#0c0f18;
 color:#ebe6ff;
 
-font-family:monospace;
+font-family:'IBM Plex Mono', monospace;
 
 min-height:100vh;
 display:flex;
@@ -16,9 +16,113 @@ main{
 flex:1;
 }
 
+
+#home-constellation-message{
+
+position:absolute;
+
+bottom:-60px;
+left:50%;
+
+transform:translateX(-50%);
+
+font-size:12px;
+
+letter-spacing:.15em;
+
+opacity:0;
+
+transition:opacity 1s ease;
+
+}
+
+.constellation.complete #home-constellation-message{
+
+opacity:.8;
+
+}
+
+
+#constellation-message{
+position:fixed;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+font-size:12px;
+letter-spacing:2px;
+opacity:0;
+transition:opacity 1.5s ease;
+}
+
+.constellation-complete #constellation-message{
+opacity:0.8;
+}
+
+
+body.constellation-complete .star{
+animation-duration:6s;
+}
+
+
 /* ---------- SKY ---------- */
 
 #sky{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+overflow:hidden;
+pointer-events:none;
+opacity:.8;
+filter:blur(.2px);
+}
+
+/* STAR BASE */
+
+.sky-star{
+position:absolute;
+border-radius:50%;
+background:white;
+}
+
+/* DEPTH LAYERS */
+
+.sky-star.far{
+opacity:.35;
+}
+
+.sky-star.mid{
+opacity:.6;
+}
+
+.sky-star.near{
+opacity:.9;
+
+box-shadow:
+0 0 6px rgba(255,255,255,.8),
+0 0 12px rgba(210,200,255,.6);
+}
+
+/* TWINKLE */
+
+.sky-star{
+animation:starTwinkle 6s infinite ease-in-out;
+}
+
+@keyframes starTwinkle{
+
+0%{opacity:.6}
+50%{opacity:1}
+100%{opacity:.6}
+
+}
+
+
+/* ---------- SKY CONSTELLATIONS ---------- */
+
+#sky-lines{
 
 position:fixed;
 top:0;
@@ -27,32 +131,62 @@ left:0;
 width:100%;
 height:100%;
 
+pointer-events:none;
+
 z-index:-1;
 
-overflow:hidden;
+}
+
+#sky-lines line{
+
+stroke:rgba(210,200,255,.08);
+stroke-width:.5;
+
+opacity:0;
+
+animation:skyLineFade 8s ease forwards;
 
 }
 
-.reveal{
-opacity:1;
-transform:none;
+@keyframes skyLineFade{
+
+0%{opacity:0}
+20%{opacity:.15}
+80%{opacity:.15}
+100%{opacity:0}
+
 }
+
+
+/* ---------- SKY DEPTH LAYERS ---------- */
 
 .sky-star{
 
 position:absolute;
-background:white;
 border-radius:50%;
-
-animation:skyTwinkle 6s infinite ease-in-out;
+background:white;
 
 }
 
-@keyframes skyTwinkle{
+.sky-star.far{
 
-0%{opacity:.3}
-50%{opacity:1}
-100%{opacity:.3}
+opacity:.35;
+
+}
+
+.sky-star.mid{
+
+opacity:.6;
+
+}
+
+.sky-star.near{
+
+opacity:.9;
+
+box-shadow:
+0 0 6px rgba(255,255,255,.8),
+0 0 12px rgba(210,200,255,.6);
 
 }
 
@@ -87,7 +221,7 @@ flex-direction:column;
 justify-content:flex-start;
 align-items:center;
 
-padding-top:110px;
+padding-top:180px;
 
 text-align:center;
 
@@ -140,12 +274,42 @@ font-size:13px;
 
 .intro{
 
-max-width:500px;
+max-width:540px;
+line-height:1.7;
 margin-top:20px;
 opacity:.8;
 
 }
 
+
+.studio-star{
+
+position:fixed;
+
+top:30px;
+left:40px;
+
+font-size:30px;
+
+color:rgba(235,230,255,.95);
+
+text-decoration:underline;
+
+cursor:pointer;
+
+transition:transform .2s ease;
+
+}
+
+.studio-star:hover{
+
+transform:scale(1.25);
+
+text-shadow:
+0 0 20px rgba(255,255,255,1),
+0 0 40px rgba(235,230,255,.9);
+
+}
 
 /* ---------- CONSTELLATION ---------- */
 
@@ -165,7 +329,7 @@ margin-top:40px;
 .constellation-lines line{
 
 stroke:rgba(210,200,255,.35);
-stroke-width:0.6;
+stroke-width:.08;
 
 opacity:0;
 
@@ -176,6 +340,8 @@ stroke-dashoffset:120;
 transition:
 stroke-dashoffset 1.2s ease,
 opacity .4s ease;
+
+transition-delay:.8s;
 
 }
 
@@ -244,7 +410,7 @@ transition:
 transform .4s ease,
 box-shadow .4s ease;
 
-animation:starPulse 4s infinite ease-in-out;
+
 
 }
 
@@ -297,7 +463,7 @@ font-family:system-ui;
 
 color:rgba(255,255,255,.85);
 
-opacity:.25;
+opacity:0;
 
 transition:opacity .3s;
 
@@ -377,7 +543,7 @@ animation:centerBirth 1.2s ease forwards;
 
 0%{
 opacity:0;
-transform:translate(-50%,-50%) scale(.3);
+transform:translate(-50%,-50%) scale(.2);
 }
 
 100%{
@@ -445,6 +611,16 @@ letter-spacing:.08em;
 .s3{ animation:starBirth 1.2s ease forwards; animation-delay:1.2s; }
 .s4{ animation:starBirth 1.2s ease forwards; animation-delay:1.5s; }
 .s5{ animation:starBirth 1.2s ease forwards; animation-delay:1.8s; }
+
+.s1{ animation-delay:.6s; }
+
+.s2{ animation-delay:1s; }
+
+.s3{ animation-delay:1.4s; }
+
+.s4{ animation-delay:1.8s; }
+
+.s5{ animation-delay:2.2s; }
 
 /* ---------- STAR APPEAR ---------- */
 
@@ -678,7 +854,7 @@ flex:1;
 
 .practice-quote{
 
-font-size:24px;
+font-size:30px;
 line-height:1.5;
 
 margin:100px 0;
@@ -691,10 +867,12 @@ font-weight:300;
 
 letter-spacing:.02em;
 
-border-left:1px solid rgba(210,200,255,.3);
-padding-left:20px;
+
+border-left:1px solid rgba(210,200,255,.25);
+padding-left:30px;
 
 }
+
 
 
 /* ---------- SCROLL REVEAL ---------- */
@@ -721,4 +899,620 @@ transform:translateY(0);
 main.practice .reveal{
 opacity:1;
 transform:none;
+}
+
+
+/* ---------- PROJECTS PAGE ---------- */
+
+.projects{
+
+max-width:720px;
+margin:auto;
+
+padding-top:160px;
+padding-bottom:120px;
+
+line-height:1.7;
+
+}
+
+.projects-intro{
+
+margin-bottom:120px;
+
+}
+
+.projects h1{
+
+font-size:42px;
+margin-bottom:20px;
+
+}
+
+.projects .lead{
+
+font-size:18px;
+opacity:.9;
+
+max-width:520px;
+
+}
+
+.project{
+
+margin-top:80px;
+
+}
+
+.project h2{
+
+font-size:22px;
+
+margin-bottom:12px;
+
+letter-spacing:.04em;
+
+font-weight:500;
+
+}
+
+.project p{
+
+opacity:.85;
+
+max-width:520px;
+
+}
+
+
+main.projects .reveal{
+opacity:1;
+transform:none;
+}
+
+
+.project-page{
+
+padding-top:120px;
+
+}
+
+
+.project-hero{
+
+max-width:680px;
+margin:120px auto 160px auto;
+
+}
+
+
+/* ---------- PROJECTS CONSTELLATION ---------- */
+
+.projects-constellation{
+
+position:relative;
+
+width:460px;
+height:460px;
+
+margin:40px auto;
+
+}
+
+
+/* estrellas proyecto */
+
+.project-star{
+
+position:absolute;
+
+width:10px;
+height:10px;
+
+border-radius:50%;
+
+background:white;
+
+box-shadow:
+0 0 8px rgba(255,255,255,.9),
+0 0 20px rgba(210,200,255,.6);
+
+cursor:pointer;
+
+opacity:0;
+transform:scale(.2);
+
+animation:
+projectStarBirth 1.2s ease forwards,
+starPulse 4s infinite ease-in-out;
+
+}
+
+
+.project-star.visited{
+
+box-shadow:
+0 0 12px rgba(255,255,255,1),
+0 0 30px rgba(210,200,255,.9),
+0 0 60px rgba(180,160,255,.6);
+
+transform:scale(1.3);
+
+}
+
+
+.project-star.visited span{
+opacity:1;
+}
+
+
+/* etiqueta */
+
+.project-star span{
+
+position:absolute;
+
+bottom:18px;
+left:50%;
+
+transform:translateX(-50%);
+
+font-size:12px;
+letter-spacing:.15em;
+font-family:system-ui;
+
+color:rgba(255,255,255,.85);
+
+opacity:0;
+
+transition:opacity .3s;
+
+pointer-events:none;
+
+white-space:nowrap;
+
+}
+
+
+.project-star:hover span{
+opacity:.25;
+}
+
+
+.project-star:hover{
+
+transform:scale(1.8);
+
+box-shadow:
+0 0 10px rgba(255,255,255,.9),
+0 0 30px rgba(210,200,255,.8),
+0 0 60px rgba(180,160,255,.5);
+
+}
+
+
+/* ---------- PROJECT STAR POSITIONS ---------- */
+
+.p1{top:12%;left:48%}
+
+.p2{top:42%;left:18%}
+
+.p3{top:38%;left:82%}
+
+.p4{top:78%;left:54%}
+
+
+.p1{ animation-delay:.6s; }
+
+.p2{ animation-delay:1s; }
+
+.p3{ animation-delay:1.4s; }
+
+.p4{ animation-delay:1.8s; }
+
+
+/* ---------- PROJECT CONSTELLATION LINES ---------- */
+
+.projects-lines{
+
+position:absolute;
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+pointer-events:none;
+
+animation:constellationBreath 8s ease-in-out infinite;
+
+}
+
+@keyframes constellationBreath{
+
+0%{opacity:.25}
+50%{opacity:.45}
+100%{opacity:.25}
+
+}
+
+.projects-lines line{
+
+stroke:rgba(210,200,255,.25);
+stroke-width:.6;
+
+opacity:0;
+
+stroke-dasharray:120;
+stroke-dashoffset:120;
+
+animation:projectLineDraw 1.4s ease forwards;
+animation-delay:2.2s;
+
+}
+
+
+@keyframes projectLineDraw{
+
+0%{
+opacity:0;
+stroke-dashoffset:120;
+}
+
+100%{
+opacity:.35;
+stroke-dashoffset:0;
+}
+
+}
+
+.projects-constellation.active line{
+
+opacity:.9;
+
+stroke:rgba(235,230,255,.8);
+
+stroke-width:1;
+
+}
+
+
+/* ---------- PROJECT PAGE ---------- */
+
+.project-page{
+
+max-width:720px;
+margin:auto;
+
+padding-top:160px;
+padding-bottom:120px;
+
+line-height:1.7;
+
+}
+
+
+.project-hero{
+
+margin-bottom:120px;
+
+}
+
+
+.project-page h1{
+
+font-size:42px;
+margin-bottom:20px;
+
+}
+
+
+.project-page .lead{
+
+font-size:18px;
+opacity:.9;
+
+max-width:520px;
+
+}
+
+
+.project-section{
+
+margin-top:90px;
+
+}
+
+
+.project-section h2{
+
+font-size:22px;
+
+margin-bottom:20px;
+
+letter-spacing:.05em;
+
+}
+
+
+.project-section p{
+
+opacity:.85;
+
+margin-bottom:20px;
+
+max-width:520px;
+
+}
+
+.project-page .reveal{
+opacity:1;
+transform:none;
+}
+
+
+/* ---------- PROJECT STAR BIRTH ---------- */
+
+.project-star{
+
+opacity:0;
+transform:scale(.2);
+
+animation:projectStarBirth 1.2s ease forwards;
+
+}
+
+@keyframes projectStarBirth{
+
+0%{
+opacity:0;
+transform:scale(.2);
+}
+
+60%{
+opacity:1;
+transform:scale(1.2);
+}
+
+100%{
+opacity:.8;
+transform:scale(1);
+}
+
+}
+
+
+/* ---------- STAR TWINKLE ---------- */
+
+.sky-star{
+
+animation:starTwinkle 6s infinite ease-in-out;
+
+}
+
+@keyframes starTwinkle{
+
+0%{opacity:.6}
+50%{opacity:1}
+100%{opacity:.6}
+
+}
+
+
+/* ---------- PROJECT CONSTELLATION COMPLETE ---------- */
+
+.projects-constellation.complete .project-star{
+
+box-shadow:
+0 0 14px rgba(255,255,255,1),
+0 0 40px rgba(210,200,255,.9),
+0 0 80px rgba(170,150,255,.6);
+
+}
+
+.projects-constellation.complete{
+
+animation:constellationPulse 6s infinite ease-in-out;
+
+}
+
+@keyframes constellationPulse{
+
+0%{transform:scale(1)}
+50%{transform:scale(1.04)}
+100%{transform:scale(1)}
+
+}
+
+
+/* ---------- QUIET MUSEUM ---------- */
+
+.museum-section{
+
+max-width:680px;
+margin:120px auto;
+
+line-height:1.8;
+
+}
+
+
+.museum-section h2{
+
+margin-bottom:25px;
+
+}
+
+
+/* ---------- LAB PAGE ---------- */
+
+.lab{
+
+max-width:720px;
+margin:auto;
+
+padding-top:160px;
+padding-bottom:120px;
+
+line-height:1.7;
+
+}
+
+.lab-intro{
+
+margin-bottom:100px;
+
+}
+
+.lab-section{
+
+margin-top:80px;
+
+}
+
+.lab-section h2{
+
+font-size:22px;
+
+margin-bottom:20px;
+
+letter-spacing:.05em;
+
+}
+
+.lab-section p{
+
+opacity:.85;
+
+max-width:520px;
+
+}
+
+
+/* ---------- ABOUT PAGE ---------- */
+
+.about{
+
+max-width:720px;
+margin:auto;
+
+padding-top:160px;
+padding-bottom:120px;
+
+line-height:1.7;
+
+}
+
+.about-intro{
+
+margin-bottom:100px;
+
+}
+
+.about-section{
+
+margin-top:80px;
+
+}
+
+.about-section h2{
+
+font-size:22px;
+
+margin-bottom:20px;
+
+letter-spacing:.05em;
+
+}
+
+.about-section ul{
+
+margin-top:20px;
+
+}
+
+.about-section li{
+
+margin-bottom:8px;
+
+opacity:.85;
+
+}
+
+
+/* ---------- CONSTELLATION PLACEHOLDER ---------- */
+
+.constellation-placeholder{
+
+background:#1f3fff;
+color:white;
+
+}
+
+.constellation-page{
+
+height:100vh;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+text-align:center;
+
+}
+
+.construction{
+
+margin-top:20px;
+opacity:.7;
+
+letter-spacing:.1em;
+
+}
+
+
+/* ---------- SIMPLE PLACEHOLDER PAGES ---------- */
+
+.simple-page{
+
+height:100vh;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+text-align:center;
+
+padding:40px;
+
+}
+
+.simple-page h1{
+
+font-size:44px;
+margin-bottom:20px;
+
+}
+
+.simple-page .lead{
+
+max-width:420px;
+
+opacity:.85;
+line-height:1.6;
+
+}
+
+.simple-page .construction{
+
+margin-top:20px;
+
+font-size:13px;
+
+letter-spacing:.15em;
+
+opacity:.6;
+
 }
